@@ -15,29 +15,26 @@
     $initialTab = (request('tab') === 'register' || $hasRegisterErrors) ? 'register' : 'login';
 @endphp
 
-<div class="max-w-lg mx-auto my-6 sm:my-10">
-    <div class="bg-white rounded-3xl shadow-xl border border-slate-200/80 overflow-hidden">
+<div class="max-w-lg mx-auto my-6 sm:my-10 px-3 sm:px-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
         
-        <!-- Header Banner -->
-        <div class="bg-gradient-to-br from-navy-950 via-slate-900 to-navy-900 p-7 text-white text-center relative overflow-hidden">
-            <div class="absolute -right-12 -top-12 w-48 h-48 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -left-12 -bottom-12 w-40 h-40 bg-teal-500/10 rounded-full blur-2xl pointer-events-none"></div>
-            
+        <!-- Header Banner Resmi Institusional -->
+        <div class="bg-slate-900 p-6 sm:p-7 text-white text-center border-b border-slate-800">
             <div class="flex justify-center mb-1">
                 <x-app-logo size="lg" variant="mark" theme="dark" />
             </div>
 
-            <div class="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-extrabold uppercase tracking-widest border border-emerald-500/30 mt-3 mb-1">
+            <div class="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[11px] font-mono font-semibold uppercase tracking-wider mt-3 mb-1 border border-slate-700">
                 <span>Bilik Suara Resmi</span>
                 <span>&bull;</span>
-                <span>Polbeng</span>
+                <span>Politeknik Negeri Bengkalis</span>
             </div>
-            <h2 class="text-2xl font-heading font-black tracking-tight text-white">Portal Pemira Digital</h2>
-            <p class="text-xs text-slate-300 font-sans mt-1">Otentikasi &amp; Pendaftaran Hak Suara Mahasiswa</p>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Portal Pemira Mahasiswa</h2>
+            <p class="text-xs text-slate-400 mt-1">Otentikasi &amp; Pendaftaran Mandiri Hak Suara Digital</p>
             
             @if(isset($fase))
                 <div class="mt-2.5">
-                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-slate-800/80 text-slate-300 text-[10px] font-mono border border-slate-700">
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono border border-slate-700">
                         <span class="w-1.5 h-1.5 rounded-full {{ in_array($fase, ['aktif', 'voting']) ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400' }}"></span>
                         <span>Fase Sistem: <strong class="text-white uppercase">{{ $fase }}</strong></span>
                     </span>
@@ -46,13 +43,13 @@
         </div>
 
         <!-- Tab Switcher (Masuk vs Daftar) -->
-        <div class="px-6 pt-6 pb-2">
-            <div class="flex p-1.5 bg-slate-100/90 rounded-2xl border border-slate-200">
+        <div class="px-5 sm:px-6 pt-5 pb-2">
+            <div class="flex p-1 bg-slate-100 rounded-xl border border-slate-200">
                 <button type="button" 
                         id="tab-btn-login" 
                         onclick="switchTab('login')" 
-                        class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 {{ $initialTab === 'login' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/60' : 'text-slate-500 hover:text-slate-800' }}">
-                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="flex-1 py-2.5 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 {{ $initialTab === 'login' ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800' }}">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
                     </svg>
                     <span>Masuk (Login)</span>
@@ -60,8 +57,8 @@
                 <button type="button" 
                         id="tab-btn-register" 
                         onclick="switchTab('register')" 
-                        class="flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2 {{ $initialTab === 'register' ? 'bg-white text-slate-900 shadow-sm border border-slate-200/60' : 'text-slate-500 hover:text-slate-800' }}">
-                    <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="flex-1 py-2.5 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 {{ $initialTab === 'register' ? 'bg-white text-slate-900 shadow-sm border border-slate-200' : 'text-slate-500 hover:text-slate-800' }}">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
                     </svg>
                     <span>Daftar Akun Baru</span>
@@ -70,7 +67,7 @@
         </div>
 
         <!-- Form Body Container -->
-        <div class="p-6 sm:p-8 pt-4">
+        <div class="p-5 sm:p-7 pt-3">
 
             <!-- ========================================== -->
             <!-- 1. PANEL LOGIN PEMILIH                     -->
@@ -93,10 +90,15 @@
                             <input type="text" 
                                    name="nim" 
                                    id="login_nim" 
-                                   value="{{ old('nim') }}" 
+                                   value="{{ old('nim', request('quick_nim')) }}" 
                                    required 
+                                   inputmode="numeric"
+                                   pattern="[0-9]{8,10}"
+                                   minlength="8"
+                                   maxlength="10"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
                                    autocomplete="username"
-                                   placeholder="Contoh: 120120045" 
+                                   placeholder="Contoh: 120140001 (8-10 digit angka)" 
                                    class="w-full pl-11 pr-4 py-3 bg-slate-50 border @error('nim') border-rose-500 @else border-slate-300 @enderror rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition text-sm">
                         </div>
                         @error('nim')
@@ -110,7 +112,7 @@
                             <label for="login_pin" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
                                 Kata Sandi (Password Akun)
                             </label>
-                            <span class="text-[11px] text-slate-400">Password saat Pendaftaran Mandiri</span>
+                            <span class="text-[11px] text-slate-400">Password / PIN Akun</span>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -121,6 +123,7 @@
                             <input type="password" 
                                    name="pin" 
                                    id="login_pin" 
+                                   value="{{ request('quick_nim') ? '123456' : '' }}"
                                    required 
                                    autocomplete="current-password"
                                    placeholder="Masukkan Kata Sandi akun Anda" 
@@ -148,12 +151,22 @@
                         <span><strong>1 NIM = 1 Suara.</strong> Sesi bilik suara terenkripsi dan terlindung dari akses ganda secara bersamaan.</span>
                     </div>
 
+                    @if(config('services.turnstile.enabled'))
+                        <!-- Cloudflare Turnstile Anti-Bot Protection -->
+                        <div class="flex flex-col items-center justify-center my-1">
+                            <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light"></div>
+                            @error('cf-turnstile-response')
+                                <p class="mt-1.5 text-xs text-rose-600 font-semibold text-center">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    @endif
+
                     <!-- Submit Button -->
                     <button type="submit" 
                             id="loginSubmitBtn" 
-                            class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/30 transition transform hover:-translate-y-0.5 flex items-center justify-center space-x-2 text-sm">
+                            class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center space-x-2 text-xs">
                         <span id="loginBtnText">Masuk ke Bilik Suara</span>
-                        <svg id="loginBtnSpinner" class="hidden animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+                        <svg id="loginBtnSpinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                         </svg>
@@ -185,8 +198,73 @@
             <!-- ========================================== -->
             <div id="panel-register" class="{{ $initialTab === 'register' ? '' : 'hidden' }}">
                 @if($allowsPendaftaran ?? true)
+                    <!-- Data Mahasiswa Dummy untuk Uji Coba Pendaftaran Mandiri -->
+                    @if(!empty($dummyStudents))
+                    <div class="mb-5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-200/80">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Akun Demo Pengujian Pendaftaran</span>
+                                <span class="text-[11px] text-slate-500">Data resmi master mahasiswa (BAAK) siap diuji coba</span>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">5 Jurusan</span>
+                        </div>
+
+                        <div class="space-y-2">
+                            @foreach($dummyStudents as $ds)
+                                <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">{{ $ds['nim'] }}</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">{{ $ds['nama'] }}</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">{{ $ds['prodi'] }}</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">{{ $ds['tanggal_lahir'] }}</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                        @if(!empty($ds['is_registered']))
+                                            <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                                Sudah Aktif
+                                            </span>
+                                            <form action="{{ route('daftar.reset_demo') }}" method="POST" class="inline">
+                                                @csrf
+                                                <input type="hidden" name="nim" value="{{ $ds['nim'] }}">
+                                                <button type="submit" 
+                                                        title="Hapus data akun ini agar bisa diuji pendaftaran kembali dari awal"
+                                                        class="text-[10px] font-semibold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-2 py-1 rounded-lg transition">
+                                                    Reset Ulang &rarr;
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button type="button" 
+                                                    onclick="fillTestRegistration('{{ $ds['nim'] }}', '{{ $ds['tanggal_lahir'] }}', '{{ $ds['email_saran'] }}')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-2.5 italic leading-tight">
+                            *Tips: Klik <strong>"Gunakan Data"</strong> untuk mengisi NIM, Tanggal Lahir, dan Kata Sandi secara otomatis. Anda juga dapat mengganti alamat email ke email pribadi Anda jika ingin menerima OTP di email Anda.
+                        </p>
+                    </div>
+                    @endif
+
                     <form action="{{ route('daftar.otp.send') }}" method="POST" id="registerForm" class="space-y-4">
                         @csrf
+
+                        <!-- Anti-Bot Honeypot Trap & Time Token (Tersembunyi dari manusia) -->
+                        <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                            <input type="text" name="website_trap" tabindex="-1" autocomplete="off" value="">
+                            <input type="hidden" name="form_time" value="{{ encrypt(time()) }}">
+                        </div>
 
                         @if(request('kode') || old('kode_pendaftaran'))
                             <div>
@@ -212,7 +290,12 @@
                                    id="reg_nim" 
                                    value="{{ old('nim') }}" 
                                    required 
-                                   placeholder="Contoh: 120510001 (sesuai KTM)" 
+                                   inputmode="numeric"
+                                   pattern="[0-9]{8,10}"
+                                   minlength="8"
+                                   maxlength="10"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+                                   placeholder="Contoh: 120140001 (8-10 digit angka)" 
                                    class="w-full px-3.5 py-2.5 bg-slate-50 border @error('nim') border-rose-500 @else border-slate-300 @enderror rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
                             @error('nim')
                                 <p class="mt-1 text-xs text-rose-600 font-semibold">{{ $message }}</p>
@@ -315,12 +398,22 @@
                             @enderror
                         </div>
 
+                        @if(config('services.turnstile.enabled'))
+                            <!-- Cloudflare Turnstile Anti-Bot Protection -->
+                            <div class="flex flex-col items-center justify-center my-2">
+                                <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light"></div>
+                                @error('cf-turnstile-response')
+                                    <p class="mt-1.5 text-xs text-rose-600 font-semibold text-center">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        @endif
+
                         <!-- Submit Button Pendaftaran -->
                         <button type="submit" 
                                 id="regSubmitBtn" 
-                                class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold rounded-xl shadow-lg shadow-indigo-600/30 transition transform hover:-translate-y-0.5 flex items-center justify-center space-x-2 text-sm mt-2">
+                                class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center space-x-2 text-xs mt-2">
                             <span id="regBtnText">Daftar &amp; Kirim Kode OTP &rarr;</span>
-                            <svg id="regBtnSpinner" class="hidden animate-spin w-5 h-5 text-white" fill="none" viewBox="0 0 24 24">
+                            <svg id="regBtnSpinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
                             </svg>
@@ -375,19 +468,31 @@
         </div>
     </div>
 
-
-
-    <!-- Link ke Login Admin -->
-    <div class="mt-6 text-center">
-        <a href="{{ route('admin.login') }}" class="inline-flex items-center space-x-2 text-xs font-bold text-slate-600 hover:text-teal-700 bg-white hover:bg-teal-50 px-4 py-2.5 rounded-2xl border border-slate-200 hover:border-teal-300 shadow-sm transition group">
-            <div class="w-6 h-6 rounded-lg bg-teal-100 group-hover:bg-teal-600 flex items-center justify-center transition">
-                <svg class="w-3.5 h-3.5 text-teal-700 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+    <!-- Helpdesk & Live Chat Quick Access Banner -->
+    <div class="mt-4 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-3 text-left">
+            <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold flex-shrink-0 border border-slate-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
             </div>
-            <span>Login sebagai Panitia / Administrator KPR &rarr;</span>
-        </a>
+            <div>
+                <div class="flex items-center space-x-1.5">
+                    <span class="font-bold text-slate-800">Butuh Bantuan Kendala Akun / Pendaftaran?</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Live chat &amp; WhatsApp panitia KPR (Komisi Pemilihan Raya) &amp; PanWas siap mendampingi Anda.</p>
+            </div>
+        </div>
+        <button type="button" 
+                onclick="openHelpdeskModal('chat')" 
+                class="w-full sm:w-auto px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm text-xs flex-shrink-0">
+            <span>Buka Helpdesk</span>
+            <span>&rarr;</span>
+        </button>
     </div>
+
+    <!-- Link ke Login Admin disembunyikan demi privasi & keamanan portal mahasiswa -->
 </div>
 @endsection
 
@@ -482,16 +587,22 @@
 
         if (nimInput) nimInput.value = nim;
         if (dobInput) dobInput.value = dob;
-        if (emailInput) emailInput.value = email;
+        if (emailInput && email) emailInput.value = email;
         if (passInput) passInput.value = 'Polbeng2026!';
         if (confirmPassInput) confirmPassInput.value = 'Polbeng2026!';
 
-        [nimInput, dobInput, emailInput, passInput, confirmPassInput].forEach(el => {
+        [nimInput, dobInput, passInput, confirmPassInput].forEach(el => {
             if (el) {
                 el.classList.add('ring-2', 'ring-indigo-500');
                 setTimeout(() => el.classList.remove('ring-2', 'ring-indigo-500'), 1000);
             }
         });
+
+        if (emailInput) {
+            emailInput.focus();
+            emailInput.classList.add('ring-2', 'ring-indigo-500');
+            setTimeout(() => emailInput.classList.remove('ring-2', 'ring-indigo-500'), 1000);
+        }
     }
 
     // Hash & URL query detection on load

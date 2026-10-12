@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCandidateRequest;
+use App\Http\Requests\UpdateCandidateRequest;
 use App\Models\AuditLog;
 use App\Models\BallotBox;
 use App\Models\Candidate;
@@ -39,30 +41,9 @@ class CandidateController extends Controller
     /**
      * Simpan paslon baru ke database
      */
-    public function store(Request $request)
+    public function store(StoreCandidateRequest $request)
     {
-        $request->validate([
-            'election_category_id' => ['required', 'exists:election_categories,id'],
-            'candidate_number' => [
-                'required',
-                'integer',
-                'min:1',
-                Rule::unique('candidates')->where(fn ($query) => 
-                    $query->where('election_category_id', $request->election_category_id)
-                ),
-            ],
-            'leader_name' => ['required', 'string', 'max:150'],
-            'leader_nim' => ['nullable', 'string', 'max:20'],
-            'vice_leader_name' => ['nullable', 'string', 'max:150'],
-            'vice_leader_nim' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'], // Maksimal 2MB
-            'vision' => ['required', 'string'],
-            'mission' => ['required', 'string'],
-        ], [
-            'candidate_number.unique' => 'Nomor urut ini sudah digunakan oleh paslon lain pada kategori pemilihan tersebut.',
-            'photo.image' => 'File foto harus berupa gambar valid (JPG, PNG, WebP).',
-            'photo.max' => 'Ukuran foto maksimal 2MB.',
-        ]);
+        $validated = $request->validated();
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
@@ -115,29 +96,10 @@ class CandidateController extends Controller
     /**
      * Perbarui data paslon
      */
-    public function update(Request $request, int $id)
+    public function update(UpdateCandidateRequest $request, int $id)
     {
         $candidate = Candidate::findOrFail($id);
-
-        $request->validate([
-            'election_category_id' => ['required', 'exists:election_categories,id'],
-            'candidate_number' => [
-                'required',
-                'integer',
-                'min:1',
-                Rule::unique('candidates')->where(fn ($query) => 
-                    $query->where('election_category_id', $request->election_category_id)
-                )->ignore($candidate->id),
-            ],
-            'leader_name' => ['required', 'string', 'max:150'],
-            'leader_nim' => ['nullable', 'string', 'max:20'],
-            'vice_leader_name' => ['nullable', 'string', 'max:150'],
-            'vice_leader_nim' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
-            'vision' => ['required', 'string'],
-            'mission' => ['required', 'string'],
-            'is_active' => ['required', 'boolean'],
-        ]);
+        $validated = $request->validated();
 
         $photoPath = $candidate->photo_path;
         if ($request->hasFile('photo')) {

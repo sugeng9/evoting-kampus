@@ -42,4 +42,16 @@ return [
     ],
 
     'password_timeout' => 10800,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sembunyikan URL Login Default (/login -> 404)
+    |--------------------------------------------------------------------------
+    | Mengambil path URL login pemilih dan admin dari file .env demi mitigasi
+    | automated crawler / bot scanning. Akses ke /login default akan di-404.
+    */
+    'login_path' => env('LOGIN_PATH', 'auth-pemira'),
+    'admin_login_path' => env('ADMIN_LOGIN_PATH', 'admin/login'),
+    'admin_ip_allowlist' => env('ADMIN_IP_ALLOWLIST', ''),
+
 ];

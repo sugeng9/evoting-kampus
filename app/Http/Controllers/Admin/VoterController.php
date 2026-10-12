@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BulkGenerateTokensRequest;
+use App\Http\Requests\ImportVotersRequest;
+use App\Http\Requests\ResetVoterPasswordRequest;
 use App\Models\AuditLog;
 use App\Models\ElectionCategory;
 use App\Models\PemilihMaster;
@@ -35,10 +38,11 @@ class VoterController extends Controller
         $query = Voter::withCount('participations');
 
         if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('nim', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%")
-                  ->orWhere('study_program', 'like', "%{$search}%");
+            $escapedSearch = addcslashes($search, '%_\\');
+            $query->where(function ($q) use ($escapedSearch) {
+                $q->where('nim', 'like', "%{$escapedSearch}%")
+                  ->orWhere('name', 'like', "%{$escapedSearch}%")
+                  ->orWhere('study_program', 'like', "%{$escapedSearch}%");
             });
         }
 
@@ -206,7 +210,7 @@ class VoterController extends Controller
     /**
      * Menerbitkan PIN Token Massal (Bulk Token Generator)
      */
-    public function bulkGenerateTokens(Request $request)
+    public function bulkGenerateTokens(BulkGenerateTokensRequest $request)
     {
         @set_time_limit(180);
         Voter::ensureSchema();
@@ -280,6 +284,11 @@ class VoterController extends Controller
             fclose($handle);
         };
 
+        AuditLog::record('DATA_EXPORTED', 'export:voter_tokens', [
+            'type' => 'token_distribution_csv',
+            'filename' => 'berita_acara_distribusi_token_pemira_' . date('Ymd_His') . '.csv',
+        ]);
+
         return response()->stream($callback, 200, $headers);
     }
 
@@ -294,6 +303,11 @@ class VoterController extends Controller
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="salinan_resmi_dpt_saksi_ormawa_' . date('Ymd_His') . '.csv"',
         ];
+
+        AuditLog::record('DATA_EXPORTED', 'export:ormawa_dpt', [
+            'type' => 'ormawa_clean_dpt_csv',
+            'filename' => 'salinan_resmi_dpt_saksi_ormawa_' . date('Ymd_His') . '.csv',
+        ]);
 
         $callback = function () {
             $handle = fopen('php://output', 'w');
@@ -337,10 +351,11 @@ class VoterController extends Controller
         $query = Voter::query();
 
         if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('nim', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%")
-                  ->orWhere('study_program', 'like', "%{$search}%");
+            $escapedSearch = addcslashes($search, '%_\\');
+            $query->where(function ($q) use ($escapedSearch) {
+                $q->where('nim', 'like', "%{$escapedSearch}%")
+                  ->orWhere('name', 'like', "%{$escapedSearch}%")
+                  ->orWhere('study_program', 'like', "%{$escapedSearch}%");
             });
         }
 
@@ -474,7 +489,7 @@ class VoterController extends Controller
     /**
      * Bantuan Darurat Admin: Reset Kata Sandi Mahasiswa (Lupa Password saat Hari Pemilihan)
      */
-    public function resetPassword(Request $request, int $id)
+    public function resetPassword(ResetVoterPasswordRequest $request, int $id)
     {
         $voter = Voter::findOrFail($id);
 
@@ -534,16 +549,9 @@ class VoterController extends Controller
      * Otomatis melakukan saringan akademik: DPS -> DPT (Aktif/Magang) vs TMS (Cuti/DO/Wisuda/Kasus)
      * Sekaligus mensinkronkan Data Master (PemilihMaster) untuk pendaftaran mandiri pemilih.
      */
-    public function processImport(Request $request)
+    public function processImport(ImportVotersRequest $request)
     {
         @set_time_limit(300); // 5 menit untuk file ribuan mahasiswa
-
-        $request->validate([
-            'excel_file' => ['required', 'file', 'max:20480'], // Maks. 20MB
-        ], [
-            'excel_file.required' => 'Pilih file Excel (.xlsx) atau CSV (.csv) data mahasiswa kampus terlebih dahulu.',
-            'excel_file.max' => 'Ukuran file maksimal 20MB.',
-        ]);
 
         $file = $request->file('excel_file');
         $extension = strtolower($file->getClientOriginalExtension());
@@ -769,6 +777,11 @@ class VoterController extends Controller
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="rekap_dpt_pemira_' . date('Ymd_His') . '.csv"',
         ];
+
+        AuditLog::record('DATA_EXPORTED', 'export:dpt_rekap', [
+            'type' => 'dpt_master_csv',
+            'filename' => 'rekap_dpt_pemira_' . date('Ymd_His') . '.csv',
+        ]);
 
         $callback = function () {
             $handle = fopen('php://output', 'w');

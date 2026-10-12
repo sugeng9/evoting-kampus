@@ -30,6 +30,16 @@ class NimStatusController extends Controller
 
         // Verifikasi NIM + tanggal lahir (pesan generik untuk mencegah enumerasi)
         $master = PemilihMaster::findByNim($request->nim);
+
+        if (! $master) {
+            // Anti-Timing Attack: Hashing dummy agar waktu eksekusi identik saat NIM tidak ada
+            hash('sha256', trim($request->tanggal_lahir));
+            try {
+                \Carbon\Carbon::parse(trim($request->tanggal_lahir))->format('Y-m-d');
+                hash('sha256', 'dummy_salt_timing_status');
+            } catch (\Throwable $e) {}
+        }
+
         if (! $master || ! $master->verifyTanggalLahir(trim($request->tanggal_lahir))) {
             AuditLogger::log('CEK_STATUS_GAGAL', "NIM {$request->nim} — data tidak cocok.", null, 'system');
             return back()->withInput()->with('error', 'Data tidak ditemukan atau tidak cocok.');
@@ -87,6 +97,16 @@ class NimStatusController extends Controller
 
         // Verifikasi NIM + tanggal lahir dulu (mencegah laporan asal)
         $master = PemilihMaster::findByNim($request->nim);
+
+        if (! $master) {
+            // Anti-Timing Attack: Hashing dummy agar waktu eksekusi identik saat NIM tidak ada
+            hash('sha256', trim($request->tanggal_lahir));
+            try {
+                \Carbon\Carbon::parse(trim($request->tanggal_lahir))->format('Y-m-d');
+                hash('sha256', 'dummy_salt_timing_status');
+            } catch (\Throwable $e) {}
+        }
+
         if (! $master || ! $master->verifyTanggalLahir(trim($request->tanggal_lahir))) {
             return back()->withInput()->with('error', 'Data tidak ditemukan atau tidak cocok.');
         }
@@ -108,18 +128,29 @@ class NimStatusController extends Controller
             return back()->with('error', 'Pelaporan sengketa tidak tersedia di fase saat ini.');
         }
 
+        // Simpan lampiran berkas bukti KTM ke direktori privat (di luar webroot public)
+        $ktmPath = null;
+        if ($request->hasFile('bukti_ktm')) {
+            $file = $request->file('bukti_ktm');
+            $extension = strtolower($file->getClientOriginalExtension());
+            $safeFilename = \Illuminate\Support\Str::uuid()->toString() . '.' . $extension;
+            $ktmPath = $file->storeAs('private_ktm', $safeFilename, 'local');
+        }
+
         Sengketa::create([
-            'nim'            => $request->nim,
-            'alasan'         => $request->alasan,
-            'pelapor_kontak' => $request->pelapor_kontak,
-            'status'         => 'baru',
+            'nim'              => $request->nim,
+            'alasan'           => $request->alasan,
+            'pelapor_kontak'   => $request->pelapor_kontak,
+            'bukti_ktm_path'   => $ktmPath,
+            'ktm_diverifikasi' => $ktmPath !== null,
+            'status'           => 'baru',
         ]);
 
         AuditLogger::log('LAPORAN_SENGKETA',
-            "Laporan sengketa NIM {$request->nim} dari {$request->pelapor_kontak}.",
+            "Laporan sengketa NIM {$request->nim} dari {$request->pelapor_kontak}" . ($ktmPath ? " (Lampiran KTM diunggah)." : "."),
             null, 'system');
 
         return back()->with('success',
-            'Laporan sengketa berhasil dikirim. Tim helpdesk KPU-M akan menghubungi Anda dalam 1x24 jam.');
+            'Laporan sengketa berhasil dikirim. Tim helpdesk KPU-M akan memeriksa dokumen dan menghubungi Anda dalam 1x24 jam.');
     }
 }

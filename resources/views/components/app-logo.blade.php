@@ -2,8 +2,8 @@
     'variant' => 'full', // 'full', 'mark', 'compact'
     'size' => 'md',      // 'xs', 'sm', 'md', 'lg', 'xl'
     'theme' => 'dark',   // 'dark', 'light'
-    'title' => 'PEMIRA POLBENG',
-    'subtitle' => 'Komisi Pemilihan Umum Mahasiswa'
+    'title' => 'PEMIRA POLITEKNIK NEGERI BENGKALIS',
+    'subtitle' => 'KPR (Komisi Pemilihan Raya)'
 ])
 
 @php

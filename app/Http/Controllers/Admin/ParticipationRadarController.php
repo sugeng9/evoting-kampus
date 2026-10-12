@@ -46,13 +46,23 @@ class ParticipationRadarController extends Controller
                 $q->where('study_program', $prodi)->where('is_active', true);
             })->distinct()->count('voter_id');
 
-            // Total pemilih yang sudah menuntaskan seluruh 3 hak suara (BEM, MPM, HMJ)
+            // Hitung berapa kategori yang memerlukan pemungutan suara aktif untuk prodi ini (Opsi B: Aklamasi tidak dihitung bilik suara)
+            $prodiVotingRequiredCount = ElectionCategory::where('is_active', true)
+                ->get()
+                ->filter(function($c) use ($prodi) {
+                    $matches = (!$c->study_program_filter || strcasecmp(trim($c->study_program_filter), trim($prodi)) === 0);
+                    return $matches && $c->isVotingRequired();
+                })
+                ->count();
+            $prodiVotingRequiredCount = max(1, $prodiVotingRequiredCount);
+
+            // Total pemilih yang sudah menuntaskan seluruh hak suara aktif
             $fullyVotedCount = VoterParticipation::whereHas('voter', function ($q) use ($prodi) {
                 $q->where('study_program', $prodi)->where('is_active', true);
             })
                 ->select('voter_id')
                 ->groupBy('voter_id')
-                ->havingRaw('count(*) >= 3')
+                ->havingRaw('count(*) >= ?', [(int) $prodiVotingRequiredCount])
                 ->get()
                 ->count();
 
@@ -140,9 +150,10 @@ class ParticipationRadarController extends Controller
         }
 
         if ($search !== '') {
-            $unvotedQuery->where(function ($q) use ($search) {
-                $q->where('nim', 'like', "%{$search}%")
-                  ->orWhere('name', 'like', "%{$search}%");
+            $escapedSearch = addcslashes($search, '%_\\');
+            $unvotedQuery->where(function ($q) use ($escapedSearch) {
+                $q->where('nim', 'like', "%{$escapedSearch}%")
+                  ->orWhere('name', 'like', "%{$escapedSearch}%");
             });
         }
 
@@ -312,6 +323,12 @@ class ParticipationRadarController extends Controller
             'Content-Type' => 'text/csv; charset=UTF-8',
             'Content-Disposition' => "attachment; filename=\"{$filename}\"",
         ];
+
+        AuditLog::record('DATA_EXPORTED', 'export:radar_summary', [
+            'type' => 'turnout_leaderboard_csv',
+            'filename' => $filename,
+            'admin_name' => Auth::user()->name ?? 'Administrator',
+        ]);
 
         $callback = function () use ($sortedRows) {
             $handle = fopen('php://output', 'w');

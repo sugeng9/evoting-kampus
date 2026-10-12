@@ -86,55 +86,87 @@
             </div>
 
             <!-- Transparansi Kategori: Sudah Memilih vs Belum Memilih -->
-            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-                <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Rekapitulasi:</span>
-                    <span class="font-mono text-emerald-700 font-bold" id="cat-voted-label-{{ $catData['category_id'] }}">
-                        Sudah Memilih: {{ number_format($catData['total_votes']) }} ({{ $catData['turnout_percentage'] }}%)
-                    </span>
-                    <span class="text-slate-300">&bull;</span>
-                    <span class="font-mono text-amber-700 font-bold" id="cat-not-voted-label-{{ $catData['category_id'] }}">
-                        Belum Memilih: {{ number_format($catData['not_voted_count']) }} ({{ $catData['not_voted_percentage'] }}%)
-                    </span>
-                </div>
-                <div class="w-full sm:w-56 bg-amber-100 rounded-full h-2.5 overflow-hidden flex flex-shrink-0">
-                    <div class="bg-emerald-500 h-2.5 transition-all duration-500" id="cat-voted-bar-{{ $catData['category_id'] }}" style="width: {{ $catData['turnout_percentage'] }}%"></div>
-                    <div class="bg-amber-400 h-2.5 transition-all duration-500" id="cat-not-voted-bar-{{ $catData['category_id'] }}" style="width: {{ $catData['not_voted_percentage'] }}%"></div>
-                </div>
-            </div>
-
-            <!-- Candidate Bars & Results -->
-            <div class="grid grid-cols-1 gap-6">
-                @foreach($catData['candidates'] as $cand)
-                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-slate-300 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-3">
-                                <span class="w-10 h-10 rounded-xl bg-navy-900 text-white font-black text-sm flex items-center justify-center shadow-md">
-                                    0{{ $cand['number'] }}
-                                </span>
-                                <div>
-                                    <h3 class="text-sm font-black text-slate-900 leading-snug">{{ $cand['leader_name'] }}</h3>
-                                    @if($cand['vice_leader_name'])
-                                        <p class="text-xs text-slate-500">&amp; {{ $cand['vice_leader_name'] }}</p>
-                                    @endif
-                                </div>
-                            </div>
-                            
-                            <div class="text-right">
-                                <span class="text-xl font-black text-emerald-600 font-mono" id="percentage-{{ $cand['id'] }}">{{ $cand['percentage'] }}%</span>
-                                <span class="text-xs text-slate-400 block font-mono" id="votes-{{ $cand['id'] }}">{{ number_format($cand['total_votes']) }} suara</span>
-                            </div>
-                        </div>
-
-                        <!-- Progress Bar Visual Interaktif -->
-                        <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden p-0.5">
-                            <div class="bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 h-3 rounded-full transition-all duration-700 ease-out" 
-                                 id="bar-{{ $cand['id'] }}"
-                                 style="width: {{ $cand['percentage'] }}%"></div>
+            @if(!empty($catData['is_aklamasi']))
+                @php
+                    $aklamasiWinner = $catData['aklamasi_candidate'] ?? ($catData['candidates'][0] ?? null);
+                @endphp
+                <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-2 border-amber-300 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-12 h-12 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-xl shadow-md">
+                            🏆
+                        </span>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-200 text-amber-900 uppercase tracking-wider">
+                                Ketetapan Aklamasi (Calon Tunggal)
+                            </span>
+                            <h3 class="text-base font-black text-slate-900 mt-0.5">
+                                Terpilih: {{ $aklamasiWinner['leader_name'] ?? 'Calon Tunggal' }}
+                                @if(!empty($aklamasiWinner['vice_leader_name']))
+                                    &amp; {{ $aklamasiWinner['vice_leader_name'] }}
+                                @endif
+                            </h3>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                    <p class="text-xs text-amber-900/90 leading-relaxed bg-white/80 p-3.5 rounded-xl border border-amber-200">
+                        Berdasarkan Keputusan Pleno KPR (Komisi Pemilihan Raya) Politeknik Negeri Bengkalis (Opsi Aklamasi), kategori pemilihan ini hanya memiliki <strong>1 Calon Tunggal</strong> sehingga secara sah ditetapkan sebagai <strong>Ketua Terpilih</strong> tanpa pemungutan suara di bilik suara digital.
+                    </p>
+                </div>
+            @elseif(!empty($catData['is_nihil']))
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200 text-center text-xs text-slate-500">
+                    <span class="font-bold block text-slate-700">⚠️ Kategori Nihil (0 Pasangan Calon Terdaftar)</span>
+                    <span>Pemilihan untuk kategori ini ditiadakan/ditunda dan diserahkan ke Kongres Mahasiswa.</span>
+                </div>
+            @else
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Rekapitulasi:</span>
+                        <span class="font-mono text-emerald-700 font-bold" id="cat-voted-label-{{ $catData['category_id'] }}">
+                            Sudah Memilih: {{ number_format($catData['total_votes']) }} ({{ $catData['turnout_percentage'] }}%)
+                        </span>
+                        <span class="text-slate-300">&bull;</span>
+                        <span class="font-mono text-amber-700 font-bold" id="cat-not-voted-label-{{ $catData['category_id'] }}">
+                            Belum Memilih: {{ number_format($catData['not_voted_count']) }} ({{ $catData['not_voted_percentage'] }}%)
+                        </span>
+                    </div>
+                    <div class="w-full sm:w-56 bg-amber-100 rounded-full h-2.5 overflow-hidden flex flex-shrink-0">
+                        <div class="bg-emerald-500 h-2.5 transition-all duration-500" id="cat-voted-bar-{{ $catData['category_id'] }}" style="width: {{ $catData['turnout_percentage'] }}%"></div>
+                        <div class="bg-amber-400 h-2.5 transition-all duration-500" id="cat-not-voted-bar-{{ $catData['category_id'] }}" style="width: {{ $catData['not_voted_percentage'] }}%"></div>
+                    </div>
+                </div>
+
+                <!-- Candidate Bars & Results -->
+                <div class="grid grid-cols-1 gap-6">
+                    @foreach($catData['candidates'] as $cand)
+                        <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 hover:border-slate-300 transition">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <span class="w-10 h-10 rounded-xl bg-navy-900 text-white font-black text-sm flex items-center justify-center shadow-md">
+                                        0{{ $cand['number'] }}
+                                    </span>
+                                    <div>
+                                        <h3 class="text-sm font-black text-slate-900 leading-snug">{{ $cand['leader_name'] }}</h3>
+                                        @if($cand['vice_leader_name'])
+                                            <p class="text-xs text-slate-500">&amp; {{ $cand['vice_leader_name'] }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                                
+                                <div class="text-right">
+                                    <span class="text-xl font-black text-emerald-600 font-mono" id="percentage-{{ $cand['id'] }}">{{ $cand['percentage'] }}%</span>
+                                    <span class="text-xs text-slate-400 block font-mono" id="votes-{{ $cand['id'] }}">{{ number_format($cand['total_votes']) }} suara</span>
+                                </div>
+                            </div>
+
+                            <!-- Progress Bar Visual Interaktif -->
+                            <div class="w-full bg-slate-200 rounded-full h-4 overflow-hidden p-0.5">
+                                <div class="bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-600 h-3 rounded-full transition-all duration-700 ease-out" 
+                                     id="bar-{{ $cand['id'] }}"
+                                     style="width: {{ $cand['percentage'] }}%"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
         </div>
     @endforeach

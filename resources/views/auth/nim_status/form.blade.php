@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Status NIM Pemilih - PEMIRA POLBENG</title>
+    <title>Cek Status NIM Pemilih - PEMIRA POLITEKNIK NEGERI BENGKALIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
@@ -27,8 +27,19 @@
             @csrf
             
             <div>
-                <label for="nim" class="block text-sm font-medium text-gray-700">NIM</label>
-                <input type="text" name="nim" id="nim" value="{{ old('nim') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono border p-2">
+                <label for="nim" class="block text-sm font-medium text-gray-700">Nomor Induk Mahasiswa (NIM)</label>
+                <input type="text" 
+                       name="nim" 
+                       id="nim" 
+                       value="{{ old('nim') }}" 
+                       required 
+                       inputmode="numeric"
+                       pattern="[0-9]{8,10}"
+                       minlength="8"
+                       maxlength="10"
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10)"
+                       placeholder="Contoh: 120140001 (8-10 digit angka)"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-mono border p-2">
             </div>
 
             <div>
@@ -41,8 +52,16 @@
             </button>
         </form>
 
-        <div class="mt-6 text-center">
-            <a href="{{ route('daftar.form') }}" class="text-sm text-indigo-600 hover:text-indigo-500 font-medium">Kembali ke Pendaftaran</a>
+        <div class="mt-6 text-center space-y-2">
+            <div>
+                <a href="{{ route('daftar.form') }}" class="text-sm text-indigo-600 hover:text-indigo-500 font-medium">Kembali ke Pendaftaran</a>
+            </div>
+            <div class="pt-2 border-t border-slate-100 text-xs text-slate-500">
+                <span>Butuh bantuan? Hubungi WhatsApp Helpdesk: </span>
+                <a href="https://wa.me/6285187953580?text=Halo%20Panitia%20Helpdesk%20Pemira,%20saya%20butuh%20bantuan%20terkait%20status%20NIM" target="_blank" class="font-bold text-emerald-600 hover:underline">
+                    +62 851-8795-3580 &nearr;
+                </a>
+            </div>
         </div>
     </div>
 </body>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Kategori Ormawa - KPU Kampus')
+@section('title', 'Tambah Kategori Ormawa - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

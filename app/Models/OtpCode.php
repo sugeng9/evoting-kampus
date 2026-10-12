@@ -36,16 +36,29 @@ class OtpCode extends Model
 
     public function attemptsExceeded(): bool
     {
-        return $this->percobaan >= 5;
+        return $this->percobaan >= 3;
     }
 
     public function verify(string $plainOtp): bool
     {
+        if ($this->isExpired() || $this->isUsed() || $this->attemptsExceeded()) {
+            return false;
+        }
+
         $this->increment('percobaan');
 
         if (hash('sha256', $plainOtp) === $this->kode_hash) {
-            $this->update(['used_at' => now()]);
+            // Sekali pakai: catat waktu pakai dan hanguskan expired_at agar tidak bisa dipakai ulang
+            $this->update([
+                'used_at' => now(),
+                'expired_at' => now(),
+            ]);
             return true;
+        }
+
+        // Jika salah hingga 3 kali, otomatis hanguskan OTP
+        if ($this->percobaan >= 3) {
+            $this->update(['expired_at' => now()]);
         }
 
         return false;
@@ -59,7 +72,7 @@ class OtpCode extends Model
             'nim' => $nim,
             'email' => $email,
             'kode_hash' => hash('sha256', $plainOtp),
-            'expired_at' => now()->addMinutes(10),
+            'expired_at' => now()->addMinutes(5),
         ]);
 
         $otpCode->plain_otp = $plainOtp;

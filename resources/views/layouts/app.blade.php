@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if(request()->isSecure() || strtolower(request()->header('x-forwarded-proto', '')) === 'https' || str_contains(request()->header('host', ''), 'trycloudflare.com') || str_contains(request()->header('host', ''), 'ngrok'))
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    @endif
     <title>@yield('title', 'E-Voting Kampus') - Sistem Pemira Terenkripsi</title>
     
     <!-- Tailwind CSS CDN -->
@@ -40,12 +43,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    @if(config('services.turnstile.enabled'))
+        <!-- Cloudflare Turnstile Anti-Bot Security Widget -->
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    @endif
     <style>
         body { 
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%), 
-                        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.04) 0px, transparent 50%), 
-                        #f8fafc;
+            background-color: #f8fafc;
+            color: #0f172a;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
@@ -75,7 +81,7 @@
             <!-- Brand Header -->
             <div class="h-20 px-5 flex items-center border-b border-slate-800/80 bg-navy-900/60">
                 <a href="{{ route('admin.dashboard') }}" class="block">
-                    <x-app-logo size="sm" variant="full" theme="dark" title="PEMIRA POLBENG" subtitle="Workstation KPU Admin" />
+                    <x-app-logo size="sm" variant="full" theme="dark" title="PEMIRA POLITEKNIK NEGERI BENGKALIS" subtitle="Workstation KPR &amp; PanWas" />
                 </a>
             </div>
 
@@ -114,7 +120,7 @@
                     </div>
                 </div>
 
-                <!-- Group 2: Master Data Pemira (10 Ormawa Polbeng) -->
+                <!-- Group 2: Master Data Pemira (10 Ormawa Politeknik Negeri Bengkalis) -->
                 <div>
                     <span class="px-3 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 block mb-2">Master Data Pemira</span>
                     <div class="space-y-1">
@@ -223,7 +229,7 @@
                 <div class="flex items-center justify-between">
                     <div class="min-w-0 flex-1 mr-2">
                         <div class="text-xs font-bold text-white truncate">{{ Auth::user()->name }}</div>
-                        <div class="text-[10px] text-emerald-400 font-semibold truncate">Super Admin KPU</div>
+                        <div class="text-[10px] text-emerald-400 font-semibold truncate">Super Admin KPR (Komisi Pemilihan Raya)</div>
                     </div>
                     <form action="{{ route('admin.logout') }}" method="POST">
                         @csrf
@@ -250,9 +256,9 @@
                 <div class="flex items-center space-x-3">
                     <span class="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>Sistem Pemira Polbeng Siap</span>
+                        <span>Sistem Pemira Politeknik Negeri Bengkalis Siap</span>
                     </span>
-                    <span class="text-slate-400 text-xs font-medium">Panitia KPU Workstation</span>
+                    <span class="text-slate-400 text-xs font-medium">Panitia KPR &amp; PanWas Workstation</span>
                 </div>
 
                 <!-- Right Utility Shortcuts -->
@@ -280,12 +286,12 @@
             </a>
 
             <!-- Desktop Nav Menu (For Voters / Public) -->
-            <div class="hidden sm:flex items-center space-x-4">
-                <a href="{{ route('voter.login', ['tab' => 'register']) }}" class="text-xs sm:text-sm font-bold text-emerald-400 hover:text-emerald-300 transition">
-                    📝 Daftar Pemilih
+            <div class="hidden sm:flex items-center space-x-5">
+                <a href="{{ route('voter.login', ['tab' => 'register']) }}" class="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white transition">
+                    Pendaftaran Pemilih
                 </a>
                 <a href="{{ route('nim.status.form') }}" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
-                    🔍 Cek Status NIM
+                    Cek Status NIM
                 </a>
                 <a href="{{ route('verify_ballot') }}" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
                     Audit Kuitansi
@@ -293,6 +299,12 @@
                 <a href="{{ route('quick_count') }}" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
                     Quick Count
                 </a>
+                @if(!Auth::guard('voter')->check() && !Auth::guard('web')->check())
+                    <button type="button" onclick="openHelpdeskModal('chat')" class="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white transition flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Bantuan &amp; Chat</span>
+                    </button>
+                @endif
 
                 @if(Auth::guard('voter')->check())
                     <div class="h-6 w-px bg-slate-700"></div>
@@ -322,12 +334,7 @@
                         </form>
                     </div>
                 @else
-                    <a href="{{ route('admin.login') }}" class="px-3 py-1.5 rounded-xl bg-slate-800/90 hover:bg-teal-600 text-teal-300 hover:text-white border border-slate-700 hover:border-teal-500 text-xs font-bold transition flex items-center space-x-1.5 shadow-sm">
-                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                        <span>Login Admin</span>
-                    </a>
+                    {{-- Tombol Login Admin disembunyikan dari navbar publik pemilih --}}
                 @endif
             </div>
 
@@ -348,19 +355,25 @@
         </div>
 
         <!-- Mobile Dropdown Menu -->
-        <div id="mobileMenu" class="hidden sm:hidden border-t border-slate-800 bg-navy-950/95 backdrop-blur-md px-4 pt-3 pb-5 space-y-3">
-            <a href="{{ route('voter.login', ['tab' => 'register']) }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-emerald-400 bg-emerald-950/30 border border-emerald-800/40 transition">
-                📝 Pendaftaran Akun Pemilih
+        <div id="mobileMenu" class="hidden sm:hidden border-t border-slate-800 bg-navy-950/95 backdrop-blur-md px-4 pt-3 pb-5 space-y-2">
+            <a href="{{ route('voter.login', ['tab' => 'register']) }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Pendaftaran Pemilih
             </a>
-            <a href="{{ route('nim.status.form') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition">
-                🔍 Cek Status Kepemilikan NIM
+            <a href="{{ route('nim.status.form') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Cek Status Kepemilikan NIM
             </a>
-            <a href="{{ route('verify_ballot') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition">
-                🔍 Audit Kuitansi Suara
+            <a href="{{ route('verify_ballot') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Audit Kuitansi Suara
             </a>
-            <a href="{{ route('quick_count') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition">
-                📊 Hasil Quick Count
+            <a href="{{ route('quick_count') }}" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Hasil Quick Count
             </a>
+            @if(!Auth::guard('voter')->check() && !Auth::guard('web')->check())
+                <button type="button" onclick="toggleMobileMenu(); openHelpdeskModal('chat');" class="w-full text-left px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition flex items-center justify-between">
+                    <span>Pusat Bantuan &amp; Live Chat</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                </button>
+            @endif
 
             @if(Auth::guard('voter')->check())
                 <div class="pt-3 border-t border-slate-800">
@@ -370,15 +383,15 @@
                     </div>
                     <form action="{{ route('voter.logout') }}" method="POST">
                         @csrf
-                        <button type="submit" class="w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-rose-400 hover:bg-rose-950/30 transition">
-                            🚪 Keluar dari Bilik Suara
+                        <button type="submit" class="w-full text-left px-3 py-2 rounded-xl text-sm font-semibold text-rose-400 hover:bg-rose-950/30 transition">
+                            Keluar dari Bilik Suara
                         </button>
                     </form>
                 </div>
             @elseif(Auth::guard('web')->check())
                 <div class="pt-3 border-t border-slate-800 space-y-2">
                     <a href="{{ route('admin.dashboard') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-teal-300 hover:bg-teal-950/30 transition">
-                        ⚙️ Panel Admin KPU
+                        ⚙️ Panel Admin KPR (Komisi Pemilihan Raya)
                     </a>
                     <a href="{{ route('admin.quick_count') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-amber-300 hover:bg-amber-950/30 transition">
                         📊 Grafik Quick Count Real-Time
@@ -406,11 +419,7 @@
                     </form>
                 </div>
             @else
-                <div class="pt-3 border-t border-slate-800">
-                    <a href="{{ route('admin.login') }}" class="block px-3 py-2 rounded-xl text-sm font-bold text-teal-300 hover:bg-slate-800 transition">
-                        🔐 Login Admin / Panitia KPU
-                    </a>
-                </div>
+                {{-- Tombol Login Admin disembunyikan dari menu mobile publik pemilih --}}
             @endif
         </div>
     </header>
@@ -456,21 +465,32 @@
             <p class="font-semibold text-slate-700">Komisi Pemilihan Raya (KPR) &bull; Politeknik Negeri Bengkalis &copy; {{ date('Y') }}</p>
             <p class="text-slate-400">Dilindungi dengan Enkripsi SHA-256 &amp; Protokol Kotak Suara Anonim Terpisah (Secret Ballot Engine).</p>
             <div class="pt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-slate-500 text-[11px]">
-                <a href="{{ route('voter.login') }}" class="hover:text-emerald-600 transition">Bilik Pemilih</a>
+                <a href="{{ route('voter.login') }}" class="hover:text-slate-800 transition">Bilik Pemilih</a>
                 <span class="text-slate-300">&bull;</span>
-                <a href="{{ route('quick_count') }}" class="hover:text-emerald-600 transition">Live Quick Count</a>
+                <a href="{{ route('quick_count') }}" class="hover:text-slate-800 transition">Live Quick Count</a>
                 <span class="text-slate-300">&bull;</span>
-                <a href="{{ route('verify_ballot') }}" class="hover:text-emerald-600 transition">Audit Kuitansi Suara</a>
+                <a href="{{ route('verify_ballot') }}" class="hover:text-slate-800 transition">Audit Kuitansi Suara</a>
                 <span class="text-slate-300">&bull;</span>
-                <a href="{{ route('admin.login') }}" class="font-bold text-teal-700 hover:text-teal-900 transition flex items-center space-x-1">
-                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                    </svg>
-                    <span>Login Admin / Panitia KPR</span>
-                </a>
+                <button type="button" onclick="openCookiePreferences()" class="hover:text-slate-800 transition underline underline-offset-2 text-slate-500">
+                    Pengaturan Cookie
+                </button>
+                @if(!Auth::guard('voter')->check() && !Auth::guard('web')->check())
+                    <span class="text-slate-300">&bull;</span>
+                    <button type="button" onclick="openHelpdeskModal('chat')" class="text-slate-600 hover:text-slate-900 font-semibold transition">
+                        <span>Pusat Bantuan &amp; Chat</span>
+                    </button>
+                @endif
             </div>
         </div>
     </footer>
+
+    @if(!Auth::guard('web')->check() && !Auth::guard('voter')->check())
+        <!-- Floating Helpdesk & Modal Pusat Bantuan Pemilih Mahasiswa (HANYA DI HALAMAN LUAR / PUBLIK) -->
+        <x-voter-helpdesk />
+    @endif
+
+    <!-- Komponen Privasi & Pengelolaan Cookie (UU PDP No. 27/2022) -->
+    <x-cookie-consent />
 
     <script>
         function toggleMobileMenu() {

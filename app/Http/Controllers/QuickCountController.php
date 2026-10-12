@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BallotBox;
+use App\Models\Candidate;
 use App\Models\ElectionCategory;
 use App\Models\ElectionSetting;
 use App\Models\Voter;
@@ -43,7 +44,7 @@ class QuickCountController extends Controller
         if (!$setting->is_quick_count_public && !$isAdmin) {
             return response()->json([
                 'status' => 'locked',
-                'message' => 'Hasil quick count masih dirahasiakan oleh panitia KPU Kampus sampai sesi voting resmi berakhir.',
+                'message' => 'Hasil quick count masih dirahasiakan oleh panitia KPR (Komisi Pemilihan Raya) & PanWas sampai sesi voting resmi berakhir.',
             ], 403);
         }
 
@@ -75,11 +76,10 @@ class QuickCountController extends Controller
                 // Hitung total suara yang masuk di kategori ini
                 $totalVotesCategory = BallotBox::where('election_category_id', $category->id)->count();
 
-                // Hitung perolehan per kandidat
-                $candidateVoteCounts = BallotBox::select('candidate_id', DB::raw('count(*) as total'))
-                    ->where('election_category_id', $category->id)
-                    ->groupBy('candidate_id')
-                    ->pluck('total', 'candidate_id')
+                // Hitung perolehan per kandidat via Eloquent aggregation (100% Parameterized & Type-Safe)
+                $candidateVoteCounts = Candidate::where('election_category_id', $category->id)
+                    ->withCount('ballots')
+                    ->pluck('ballots_count', 'id')
                     ->toArray();
 
                 $candidateResults = [];
@@ -136,6 +136,10 @@ class QuickCountController extends Controller
                     'not_voted_count' => $notVotedCategory,
                     'not_voted_percentage' => $notVotedPercentage,
                     'leader_candidate_id' => $leaderCandidateId,
+                    'is_aklamasi' => $category->isAklamasi(),
+                    'is_nihil' => $category->isNihil(),
+                    'is_voting_required' => $category->isVotingRequired(),
+                    'aklamasi_candidate' => $category->isAklamasi() ? ($candidateResults[0] ?? null) : null,
                     'candidates' => $candidateResults,
                 ];
             }

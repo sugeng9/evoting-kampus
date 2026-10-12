@@ -98,7 +98,7 @@
         <!-- Logo Tengah -->
         <div class="my-8 flex flex-col items-center justify-center space-y-3">
             <x-app-logo size="xl" variant="mark" theme="light" />
-            <span class="text-xs font-mono font-bold tracking-widest text-slate-500 uppercase">KPU-M POLBENG &bull; SECRET BALLOT CRYPTOGRAPHIC ENGINE</span>
+            <span class="text-xs font-mono font-bold tracking-widest text-slate-500 uppercase">KPR POLITEKNIK NEGERI BENGKALIS &bull; SECRET BALLOT CRYPTOGRAPHIC ENGINE</span>
         </div>
 
         <!-- Judul Utama Dokumen -->
@@ -112,7 +112,7 @@
                 TAHUN AKADEMIK {{ date('Y') }}/{{ date('Y')+1 }}
             </h2>
             <div class="border-t-2 border-b-2 border-black py-2 w-96 mx-auto mt-4 font-mono font-bold text-xs">
-                NOMOR DOKUMEN INDUK: KPU-POLBENG/PEMIRA/{{ date('Y') }}/FULL-REP
+                NOMOR DOKUMEN INDUK: KPR-POLBENG/PEMIRA/{{ date('Y') }}/FULL-REP
             </div>
         </div>
 
@@ -137,7 +137,7 @@
 
         <!-- Footer Penerbit Cover -->
         <div class="space-y-1 pt-6 text-xs">
-            <h3 class="font-black uppercase tracking-wider text-sm">KOMISI PEMILIHAN UMUM MAHASISWA (KPU-M)</h3>
+            <h3 class="font-black uppercase tracking-wider text-sm">KOMISI PEMILIHAN RAYA (KPR)</h3>
             <p class="font-bold">POLITEKNIK NEGERI BENGKALIS</p>
             <p class="text-[11px] text-slate-600">BENGKALIS - RIAU</p>
             <p class="font-mono text-[10px] text-slate-500 pt-2">Dicetak Resmi pada: {{ now()->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i') }} WIB</p>
@@ -157,7 +157,7 @@
         </div>
 
         <div class="text-xs text-justify my-4 leading-relaxed">
-            Berikut adalah rekapitulasi lengkap hasil perhitungan suara dan penetapan pasangan calon / calon ketua pada Sidang Pleno Terbuka Komisi Pemilihan Umum Mahasiswa Politeknik Negeri Bengkalis untuk 10 Organisasi Mahasiswa:
+            Berikut adalah rekapitulasi lengkap hasil perhitungan suara dan penetapan pasangan calon / calon ketua pada Sidang Pleno Terbuka Komisi Pemilihan Raya (KPR) &amp; PanWas Politeknik Negeri Bengkalis untuk 10 Organisasi Mahasiswa:
         </div>
 
         <!-- Tabel Ringkasan Eksekutif -->
@@ -445,7 +445,7 @@
             <div class="border border-black p-3 rounded-lg mb-4 bg-slate-50 text-[11px]">
                 <h4 class="font-black uppercase tracking-wider text-center underline mb-1">
                     @if($isEnded)
-                        PENETAPAN PEMENANG RESMI PLENO KPU MAHASISWA
+                        PENETAPAN PEMENANG RESMI PLENO KPR (KOMISI PEMILIHAN RAYA)
                     @else
                         STATUS PEROLEHAN SUARA SEMENTARA
                     @endif
@@ -497,7 +497,7 @@
                     </div>
 
                     <div>
-                        <span class="block font-bold">Ketua KPU Mahasiswa</span>
+                        <span class="block font-bold">Ketua KPR (Komisi Pemilihan Raya)</span>
                         <div class="h-12 flex items-end justify-center">
                             <span class="text-[9px] text-slate-400 italic">(Cap &amp; Ttd)</span>
                         </div>

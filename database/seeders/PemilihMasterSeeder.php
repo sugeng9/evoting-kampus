@@ -12,10 +12,46 @@ class PemilihMasterSeeder extends Seeder
 {
     public function run(): void
     {
-        // Data master mahasiswa bersumber dari import berkas resmi BAAK Kampus di Panel Admin
-        // (Data dummy mahasiswa ditiadakan agar sistem bersih 100% untuk sosialisasi resmi)
+        // Data master mahasiswa untuk pengujian pendaftaran mandiri (NIM & Tanggal Lahir resmi)
+        $sampleStudents = [
+            [
+                'nim' => '120140001',
+                'nama' => 'Syahadan Mahasiswa Uji Coba',
+                'prodi' => 'Teknik Informatika',
+                'angkatan' => '2022',
+                'tanggal_lahir_hash' => hash('sha256', '2004-05-15'), // Tanggal lahir: 2004-05-15
+            ],
+            [
+                'nim' => '120140002',
+                'nama' => 'Ahmad Fauzi',
+                'prodi' => 'Teknik Informatika',
+                'angkatan' => '2022',
+                'tanggal_lahir_hash' => hash('sha256', '2004-01-20'), // Tanggal lahir: 2004-01-20
+            ],
+            [
+                'nim' => '120120001',
+                'nama' => 'Budi Santoso',
+                'prodi' => 'Teknik Mesin',
+                'angkatan' => '2021',
+                'tanggal_lahir_hash' => hash('sha256', '2003-11-10'), // Tanggal lahir: 2003-11-10
+            ],
+            [
+                'nim' => '120130001',
+                'nama' => 'Citra Lestari',
+                'prodi' => 'Teknik Elektro',
+                'angkatan' => '2023',
+                'tanggal_lahir_hash' => hash('sha256', '2005-08-25'), // Tanggal lahir: 2005-08-25
+            ],
+        ];
 
-        // Create helpdesk user 1 (Petugas A)
+        foreach ($sampleStudents as $student) {
+            PemilihMaster::updateOrCreate(['nim' => $student['nim']], $student);
+        }
+
+        // Muat 5 akun demo registrasi berbagai jurusan
+        PemilihMaster::ensureRegistrationDummyData();
+
+        // Akun Helpdesk
         User::updateOrCreate(
             ['email' => 'helpdesk1@polbeng.ac.id'],
             [
@@ -28,33 +64,7 @@ class PemilihMasterSeeder extends Seeder
             ]
         );
 
-        // Create helpdesk user 2 (Petugas B)
-        User::updateOrCreate(
-            ['email' => 'helpdesk2@polbeng.ac.id'],
-            [
-                'name' => 'Petugas Helpdesk B',
-                'username' => 'helpdesk2',
-                'email' => 'helpdesk2@polbeng.ac.id',
-                'password' => Hash::make('Helpdesk@123!'),
-                'role' => 'helpdesk',
-                'is_active' => true,
-            ]
-        );
-
-        // Ensure admin exists
-        User::updateOrCreate(
-            ['email' => 'admin@polbeng.ac.id'],
-            [
-                'name' => 'Admin KPU-M Polbeng',
-                'username' => 'admin',
-                'email' => 'admin@polbeng.ac.id',
-                'password' => Hash::make('Admin@123!'),
-                'role' => 'super_admin',
-                'is_active' => true,
-            ]
-        );
-
-        // Create default system phase
+        // Fase awal sistem
         SystemPhase::firstOrCreate(
             ['id' => 1],
             [
@@ -64,6 +74,6 @@ class PemilihMasterSeeder extends Seeder
             ]
         );
 
-        $this->command->info('PemilihMasterSeeder: 10 data master, 2 staf, 1 fase awal berhasil dibuat.');
+        $this->command->info('PemilihMasterSeeder: 4 data master mahasiswa uji coba, staf helpdesk, dan fase awal berhasil disiapkan.');
     }
 }

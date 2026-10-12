@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Saringan DPS Kampus & Verifikasi Akademik - KPU Kampus')
+@section('title', 'Saringan DPS Kampus & Verifikasi Akademik - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-6 w-full">
@@ -48,7 +48,7 @@
         </div>
     </div>
 
-    <!-- Alur Kerja Lapangan: Tahapan Regulasi Pemira Polbeng -->
+    <!-- Alur Kerja Lapangan: Tahapan Regulasi Pemira Politeknik Negeri Bengkalis -->
     <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
         <div class="flex items-center space-x-2">
             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
@@ -72,11 +72,11 @@
             <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200 space-y-2">
                 <div class="flex items-center justify-between">
                     <span class="px-2.5 py-0.5 rounded-full bg-emerald-200 text-emerald-800 font-bold text-[10px]">TAHAP 2</span>
-                    <span class="text-emerald-600 font-mono text-[11px]">KPU x Ormawa</span>
+                    <span class="text-emerald-600 font-mono text-[11px]">KPR &amp; PanWas x Ormawa</span>
                 </div>
                 <h3 class="font-extrabold text-emerald-900 text-sm">Penyaringan Status Akademik</h3>
                 <p class="text-emerald-700 text-[11px] leading-relaxed">
-                    Panitia KPU memfilter status akademik resmi: <strong>Mahasiswa Aktif &amp; Magang</strong> sah ikut memilih. Mahasiswa <strong>Cuti, DO, Wisuda, dan Bermasalah Akademik</strong> dicoret (TMS).
+                    Panitia KPR (Komisi Pemilihan Raya) &amp; PanWas (Panitia Pengawas) memfilter status akademik resmi: <strong>Mahasiswa Aktif &amp; Magang</strong> sah ikut memilih. Mahasiswa <strong>Cuti, DO, Wisuda, dan Bermasalah Akademik</strong> dicoret (TMS).
                 </p>
             </div>
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen Kategori Ormawa - KPU Kampus')
+@section('title', 'Manajemen Kategori Ormawa - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-8 w-full">
@@ -24,7 +24,7 @@
             </a>
 
             <!-- Tombol Preset 3 Pilar -->
-            <form action="{{ route('admin.categories.seed_preset') }}" method="POST" onsubmit="return confirm('Inisialisasi atau sinkronkan struktur 3 Hak Suara (BEM, MPM, dan 8 HMJ Jurusan Polbeng)?');">
+            <form action="{{ route('admin.categories.seed_preset') }}" method="POST" onsubmit="return confirm('Inisialisasi atau sinkronkan struktur 3 Hak Suara (BEM, MPM, dan 8 HMJ Jurusan Politeknik Negeri Bengkalis)?');">
                 @csrf
                 <button type="submit" class="px-4 py-2.5 rounded-xl bg-navy-800 hover:bg-indigo-600 border border-indigo-500/40 text-indigo-200 hover:text-white text-xs font-bold transition flex items-center space-x-2 shadow-sm" title="Otomatis siapkan struktur 3 Pilar: BEM, MPM, dan HMJ Jurusan">
                     <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,11 +179,24 @@
                                 </div>
                             </td>
 
-                            <!-- Paslon Count -->
+                            <!-- Paslon Count & Status Opsi B -->
                             <td class="py-4 px-6 text-center whitespace-nowrap">
-                                <a href="{{ route('admin.candidates.index') }}" class="font-bold text-slate-800 hover:text-emerald-600 underline">
+                                <a href="{{ route('admin.candidates.index') }}" class="font-bold text-slate-800 hover:text-emerald-600 block">
                                     {{ $cat->candidates_count }} Paslon
                                 </a>
+                                @if($cat->candidates_count >= 2)
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                        Kompetisi
+                                    </span>
+                                @elseif($cat->candidates_count === 1)
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300" title="Ditetapkan Aklamasi (Tanpa Voting)">
+                                        🏆 Aklamasi
+                                    </span>
+                                @else
+                                    <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-slate-200 text-slate-600" title="Belum ada calon terdaftar (Ditunda)">
+                                        Nihil
+                                    </span>
+                                @endif
                             </td>
 
                             <!-- Suara Masuk -->

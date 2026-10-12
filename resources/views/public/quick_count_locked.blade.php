@@ -13,7 +13,7 @@
 
         <h2 class="text-xl font-black text-slate-900">Quick Count Masih Dirahasiakan</h2>
         <p class="text-xs text-slate-500 mt-2 leading-relaxed">
-            Demi menjaga independensi dan integritas suara, hasil rekapitulasi hanya akan dipublikasikan oleh Panitia KPU Kampus setelah masa pemungutan suara resmi berakhir.
+            Demi menjaga independensi dan integritas suara, hasil rekapitulasi hanya akan dipublikasikan oleh Panitia KPR (Komisi Pemilihan Raya) &amp; PanWas setelah masa pemungutan suara resmi berakhir.
         </p>
 
         <div class="my-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-600">

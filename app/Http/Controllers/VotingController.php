@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SubmitVoteRequest;
 use App\Models\BallotBox;
 use App\Models\Candidate;
 use App\Models\ElectionCategory;
@@ -36,10 +37,13 @@ class VotingController extends Controller
         
         $categoriesData = $this->votingService->getEligibleCategoriesForVoter($voter);
 
-        // Hitung ringkasan status hak suara pemilih saat ini
-        $totalEligible = count($categoriesData);
-        $totalVoted = collect($categoriesData)->where('has_voted', true)->count();
+        // Hitung ringkasan status hak suara pemilih saat ini (Hanya kategori yang memerlukan voting - OPSI B)
+        $votingCategories = collect($categoriesData)->where('requires_voting', true);
+        $totalEligible = $votingCategories->count();
+        $totalVoted = $votingCategories->where('has_voted', true)->count();
         $allCompleted = ($totalEligible > 0 && $totalEligible === $totalVoted);
+        $aklamasiCount = collect($categoriesData)->where('is_aklamasi', true)->count();
+        $nihilCount = collect($categoriesData)->where('is_nihil', true)->count();
 
         // Transparansi Data Partisipasi: Sudah Memilih vs Belum Memilih
         $totalDptGlobal = \App\Models\Voter::where('is_active', true)->count();
@@ -105,6 +109,8 @@ class VotingController extends Controller
             'totalEligible', 
             'totalVoted', 
             'allCompleted',
+            'aklamasiCount',
+            'nihilCount',
             'participationTransparency'
         ));
     }
@@ -128,6 +134,17 @@ class VotingController extends Controller
             $mpm = ElectionCategory::where('code', 'MPM_KM_2026')->where('is_active', true)->first();
             if ($mpm) {
                 return redirect()->route('voter.ballot', $mpm->id);
+            }
+        }
+
+        // Cek kelayakan OPSI B: Bilik suara hanya melayani kategori yang ada kompetisi (>= 2 paslon)
+        if (!$category->isVotingRequired()) {
+            if ($category->isAklamasi()) {
+                $cand = $category->getAklamasiCandidate();
+                $candName = $cand ? $cand->leader_name : 'Calon Tunggal';
+                return redirect()->route('voter.dashboard')->with('info', "Kategori '{$category->name}' telah ditetapkan secara AKLAMASI kepada Sdr. {$candName} (Calon Tunggal) sesuai Surat Ketetapan KPU. Anda tidak perlu mencoblos pada kategori ini.");
+            } else {
+                return redirect()->route('voter.dashboard')->with('info', "Kategori '{$category->name}' saat ini berstatus NIHIL (belum ada pasangan calon terdaftar).");
             }
         }
 
@@ -157,23 +174,20 @@ class VotingController extends Controller
             return redirect()->route('voter.dashboard')->with('error', $msg);
         }
 
-        return view('voter.ballot', compact('voter', 'category', 'setting'));
+        // Generate One-Time Idempotency Voting Token
+        $votingToken = \Illuminate\Support\Str::random(40);
+        session(['voting_token_' . $categoryId => $votingToken]);
+
+        return view('voter.ballot', compact('voter', 'category', 'setting', 'votingToken'));
     }
 
     /**
      * Submit Suara Final dengan Database Transaction & Anti-Race Condition
      */
-    public function submitVote(Request $request)
+    public function submitVote(SubmitVoteRequest $request)
     {
-        // 1. Validasi Input Ketat
-        $validated = $request->validate([
-            'category_id' => ['required', 'integer', 'exists:election_categories,id'],
-            'candidate_id' => ['required', 'integer', 'exists:candidates,id'],
-            'confirmation_pin' => ['required', 'string'], // Re-otentikasi PIN sebelum submit
-        ], [
-            'candidate_id.required' => 'Silakan pilih salah satu kandidat terlebih dahulu.',
-            'confirmation_pin.required' => 'Masukkan PIN Anda sebagai konfirmasi akhir.',
-        ]);
+        // 1. Validasi Input Ketat via FormRequest
+        $validated = $request->validated();
 
         $voter = Auth::guard('voter')->user();
 
@@ -184,12 +198,19 @@ class VotingController extends Controller
             ]);
         }
 
+        // Validasi OPSI B: Tolak submit jika kategori berstatus Aklamasi/Nihil
+        $category = ElectionCategory::findOrFail((int) $validated['category_id']);
+        if (!$category->isVotingRequired()) {
+            return redirect()->route('voter.dashboard')->with('error', 'Kategori ini berstatus Aklamasi / Nihil dan tidak menerima pemungutan suara.');
+        }
+
         // 3. Simpan Suara Melalui Core Voting Service
         try {
             $receipt = $this->votingService->castVote(
                 $voter,
                 (int) $validated['category_id'],
-                (int) $validated['candidate_id']
+                (int) $validated['candidate_id'],
+                $validated['voting_token'] ?? null
             );
 
             // Simpan data kuitansi ke flash session untuk dicetak/disimpan oleh mahasiswa

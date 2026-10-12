@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Panel - KPU Kampus')
+@section('title', 'Admin Panel - KPR & PanWas Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-8 w-full">
@@ -9,7 +9,7 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-navy-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl">
         <div>
             <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/30 mb-2">
-                <span>Panitia KPU Kampus</span>
+                <span>Panitia KPR (Komisi Pemilihan Raya) &amp; PanWas</span>
             </div>
             <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Pusat Kendali Pemira Digital</h1>
             <p class="text-xs text-slate-300 mt-1">Manajemen Sesi Pemilihan, Integritas DPT &amp; Audit Trail</p>

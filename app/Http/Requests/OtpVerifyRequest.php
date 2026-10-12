@@ -11,15 +11,17 @@ class OtpVerifyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nim' => ['required', 'string'],
-            'otp'  => ['required', 'string', 'digits:6'],
+            'nim' => ['required', 'string', 'regex:/^[0-9]{8,10}$/'],
+            'otp' => ['required', 'string', 'digits:6'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'otp.digits' => 'Kode OTP harus berupa 6 digit angka.',
+            'nim.required' => 'NIM wajib diisi.',
+            'nim.regex'    => 'NIM hanya boleh berupa angka (integer) dengan panjang 8 hingga 10 digit.',
+            'otp.digits'   => 'Kode OTP harus berupa 6 digit angka.',
         ];
     }
 }

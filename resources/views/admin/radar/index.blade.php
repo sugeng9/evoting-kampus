@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Radar Partisipasi & Mobilisasi Pemilih - KPU Polbeng')
+@section('title', 'Radar Partisipasi & Mobilisasi Pemilih - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-8 w-full">

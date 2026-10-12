@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateCategoryScheduleRequest;
+use App\Http\Requests\UpdateSessionStatusRequest;
 use App\Models\AuditLog;
 use App\Models\Candidate;
 use App\Models\ElectionCategory;
@@ -54,12 +56,8 @@ class AdminDashboardController extends Controller
     /**
      * Kontrol Status Sesi Voting (Buka / Tutup / Jeda Pemilihan)
      */
-    public function updateSessionStatus(Request $request)
+    public function updateSessionStatus(UpdateSessionStatusRequest $request)
     {
-        $request->validate([
-            'status' => ['required', 'in:DRAFT,OPEN,PAUSED,CLOSED'],
-        ]);
-
         $setting = ElectionSetting::current();
         $oldStatus = $setting->status;
         $newStatus = $request->input('status');
@@ -105,16 +103,9 @@ class AdminDashboardController extends Controller
     /**
      * Memperbarui Jadwal Waktu dan Status Pemilihan Per Kategori (Presma / HMJ)
      */
-    public function updateCategorySchedule(Request $request, int $id)
+    public function updateCategorySchedule(UpdateCategoryScheduleRequest $request, int $id)
     {
-        $validated = $request->validate([
-            'start_at' => ['nullable', 'date'],
-            'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
-            'status_override' => ['required', 'in:AUTO,FORCE_OPEN,FORCE_CLOSED'],
-        ], [
-            'end_at.after_or_equal' => 'Waktu selesai harus sama dengan atau setelah waktu mulai.',
-            'status_override.in' => 'Pilihan mode status tidak valid.',
-        ]);
+        $validated = $request->validated();
 
         $category = ElectionCategory::findOrFail($id);
 
@@ -150,7 +141,7 @@ class AdminDashboardController extends Controller
      */
     public function auditLogs()
     {
-        $logs = AuditLog::orderBy('created_at', 'desc')->paginate(50);
+        $logs = AuditLog::orderBy('id', 'desc')->paginate(50);
         return view('admin.audit_logs', compact('logs'));
     }
 }

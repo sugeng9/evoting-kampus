@@ -37,6 +37,11 @@ class Voter extends Authenticatable
         'login_attempts',
         'locked_until',
         'current_session_id',
+        'dob',
+        'tanggal_lahir',
+        'email_hash',
+        'sudah_memilih',
+        'voted_at',
     ];
 
     protected $hidden = [
@@ -49,15 +54,49 @@ class Voter extends Authenticatable
     {
         return [
             'is_active' => 'boolean',
+            'sudah_memilih' => 'boolean',
+            'voted_at' => 'datetime',
             'last_login_at' => 'datetime',
             'token_generated_at' => 'datetime',
             'password' => 'hashed',
             'email' => 'encrypted',
             'no_hp' => 'encrypted',
+            'dob' => 'encrypted',
+            'tanggal_lahir' => 'encrypted',
             'registered_at' => 'datetime',
             'activated_at' => 'datetime',
             'locked_until' => 'datetime',
         ];
+    }
+
+    /**
+     * Hitung Blind Index HMAC-SHA256 untuk pencarian/indeks unik data terenkripsi
+     */
+    public static function hashBlindIndex(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        $key = config('app.blind_index_key', env('BLIND_INDEX_KEY', config('app.key')));
+        return hash_hmac('sha256', strtolower(trim($value)), (string) $key);
+    }
+
+    /**
+     * Cari pemilih berdasarkan email menggunakan Blind Index HMAC-SHA256
+     */
+    public static function findByEmail(string $email): ?self
+    {
+        return static::where('email_hash', static::hashBlindIndex($email))->first();
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (Voter $voter) {
+            if ($voter->isDirty('email') && !empty($voter->email)) {
+                $voter->email_hash = static::hashBlindIndex($voter->email);
+            }
+        });
     }
 
     /**
@@ -115,6 +154,24 @@ class Voter extends Authenticatable
     public function hasVotedForCategory(int $categoryId): bool
     {
         return $this->participations()->where('election_category_id', $categoryId)->exists();
+    }
+
+    /**
+     * Cek apakah pemilih sudah pernah menggunakan hak suara di sistem (global)
+     */
+    public function hasVoted(): bool
+    {
+        return (bool) $this->sudah_memilih || $this->participations()->exists();
+    }
+
+    /**
+     * Tandai pemilih telah menggunakan hak suaranya
+     */
+    public function markAsVoted(): void
+    {
+        $this->sudah_memilih = true;
+        $this->voted_at = now();
+        $this->save();
     }
 
     public function isPending(): bool

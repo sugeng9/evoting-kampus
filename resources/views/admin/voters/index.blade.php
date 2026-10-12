@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Manajemen DPT & Akun Pemilih - KPU Kampus')
+@section('title', 'Manajemen DPT & Akun Pemilih - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-6 w-full">

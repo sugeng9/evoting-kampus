@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi OTP - PEMIRA POLBENG</title>
+    <title>Verifikasi OTP - PEMIRA POLITEKNIK NEGERI BENGKALIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 antialiased text-slate-800">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-slate-200/90 p-6 sm:p-8">
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Verifikasi OTP</h1>
-            <p class="text-gray-600 text-sm mt-2">NIM: <span class="font-bold text-slate-800 font-mono">{{ $nim ?? session('pendaftaran_nim') }}</span></p>
-            <p class="text-gray-600 text-sm">Kode dikirim ke: <span class="font-medium text-slate-800">{{ $maskedEmail ?? session('pendaftaran_email') }}</span></p>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Verifikasi Kode OTP</h1>
+            <p class="text-slate-500 text-xs mt-1.5">NIM: <span class="font-bold text-slate-900 font-mono">{{ $nim ?? session('pendaftaran_nim') }}</span></p>
+            <p class="text-slate-500 text-xs">Kode dikirimkan ke: <span class="font-semibold text-slate-800 font-mono">{{ $maskedEmail ?? session('pendaftaran_email') }}</span></p>
         </div>
 
 
@@ -52,29 +52,61 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('daftar.otp.verify') }}" class="space-y-6">
+        @php
+            $debugOtp = null;
+            if (app()->environment('local') || config('app.debug', true)) {
+                $latestOtp = \App\Models\OtpCode::where('nim', $nim ?? session('pendaftaran_nim'))
+                    ->whereNull('used_at')
+                    ->where('expired_at', '>', now())
+                    ->latest()
+                    ->first();
+                $debugOtp = $latestOtp?->plain_otp;
+            }
+        @endphp
+
+        @if($debugOtp)
+            <div class="mb-5 p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-left">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800 flex items-center space-x-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span>Mode Uji Coba: Kode OTP Anda</span>
+                    </span>
+                    <button type="button" 
+                            onclick="document.getElementById('otp').value = '{{ $debugOtp }}'" 
+                            class="text-[11px] font-semibold text-slate-800 bg-white hover:bg-slate-900 hover:text-white px-2 py-0.5 rounded border border-slate-300 transition shadow-sm">
+                        Klik Tempel &rarr;
+                    </button>
+                </div>
+                <div class="mt-1 flex items-center space-x-2">
+                    <span class="text-xl font-mono font-bold text-slate-900 tracking-wider">{{ $debugOtp }}</span>
+                    <span class="text-[10px] text-slate-500">(Kode OTP ditampilkan agar pengujian pendaftaran dapat langsung diuji)</span>
+                </div>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('daftar.otp.verify') }}" class="space-y-5">
             @csrf
             <input type="hidden" name="nim" value="{{ $nim ?? session('pendaftaran_nim') }}">
             
             <div>
                 <label for="otp" class="sr-only">Kode OTP</label>
-                <input type="text" name="otp" id="otp" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autofocus required class="mt-1 block w-full text-center text-3xl tracking-widest font-mono rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-3" placeholder="------">
+                <input type="text" name="otp" id="otp" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" autofocus required class="mt-1 block w-full text-center text-2xl sm:text-3xl tracking-widest font-mono rounded-xl border border-slate-300 shadow-sm focus:border-slate-800 focus:ring-1 focus:ring-slate-800 p-3 bg-slate-50 outline-none" placeholder="------">
             </div>
             
-            <div class="text-center text-sm text-gray-500">
-                <p>OTP berlaku 10 menit, maksimal 5 percobaan.</p>
-                <p class="mt-1 font-medium text-red-600 text-lg" id="countdown">10:00</p>
+            <div class="text-center text-xs text-slate-500">
+                <p>OTP berlaku 5 menit &bull; Maksimal 3 percobaan</p>
+                <p class="mt-1 font-mono font-bold text-slate-800 text-base" id="countdown">05:00</p>
             </div>
 
-            <button type="submit" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                Verifikasi & Aktifkan Akun
+            <button type="submit" class="w-full flex justify-center py-3 px-4 rounded-xl shadow-sm text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-black focus:outline-none transition">
+                Verifikasi &amp; Aktifkan Akun Pemilih
             </button>
         </form>
 
         <div class="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <form method="POST" action="{{ route('daftar.otp.resend') }}">
                 @csrf
-                <button type="submit" id="btn-resend" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center space-x-1.5 transition-colors">
+                <button type="submit" id="btn-resend" class="text-slate-800 hover:text-black font-semibold flex items-center space-x-1.5 transition-colors">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                     <span>Kirim Ulang Kode OTP</span>
                 </button>
@@ -84,10 +116,20 @@
                 &larr; Ganti NIM / Email
             </a>
         </div>
+
+        <div class="mt-4 pt-3 border-t border-slate-100 text-center text-xs text-slate-500">
+            <span>Mengalami kendala OTP? Hubungi </span>
+            <a href="https://wa.me/6285187953580?text=Halo%20Panitia%20Helpdesk%20KPR%20Pemira,%20saya%20mengalami%20kendala%20kode%20OTP%20pendaftaran" 
+               target="_blank" 
+               class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline inline-flex items-center space-x-1">
+                <span>WhatsApp Helpdesk (+62 851-8795-3580)</span>
+                <span>&nearr;</span>
+            </a>
+        </div>
     </div>
 
     <script>
-        let timeLeft = 600;
+        let timeLeft = 300;
         const countdownEl = document.getElementById('countdown');
         
         const timer = setInterval(() => {

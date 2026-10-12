@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Paslon Baru - KPU Kampus')
+@section('title', 'Tambah Paslon Baru - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">

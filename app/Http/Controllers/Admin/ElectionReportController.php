@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateElectionEndTimeRequest;
 use App\Models\AuditLog;
 use App\Models\BallotBox;
+use App\Models\Candidate;
 use App\Models\ElectionCategory;
 use App\Models\ElectionSetting;
 use App\Models\Voter;
@@ -185,11 +187,9 @@ class ElectionReportController extends Controller
     /**
      * Atur Batas Waktu Pemilihan Habis untuk Ormawa Tertentu
      */
-    public function updateEndTime(Request $request, int $id)
+    public function updateEndTime(UpdateElectionEndTimeRequest $request, int $id)
     {
-        $validated = $request->validate([
-            'end_at' => ['required', 'date'],
-        ]);
+        $validated = $request->validated();
 
         $category = ElectionCategory::findOrFail($id);
         $parsedEnd = Carbon::parse($validated['end_at'], 'Asia/Jakarta');
@@ -207,11 +207,9 @@ class ElectionReportController extends Controller
     /**
      * Atur Batas Waktu Pemilihan Serentak untuk Seluruh 10 Ormawa
      */
-    public function setAllEndTime(Request $request)
+    public function setAllEndTime(UpdateElectionEndTimeRequest $request)
     {
-        $validated = $request->validate([
-            'end_at' => ['required', 'date'],
-        ]);
+        $validated = $request->validated();
 
         $parsedEnd = Carbon::parse($validated['end_at'], 'Asia/Jakarta');
 
@@ -248,11 +246,10 @@ class ElectionReportController extends Controller
         // 2. Total surat suara sah di kotak suara digital
         $totalBallots = BallotBox::where('election_category_id', $category->id)->count();
 
-        // 3. Suara per kandidat
-        $votesMap = BallotBox::select('candidate_id', DB::raw('count(*) as total'))
-            ->where('election_category_id', $category->id)
-            ->groupBy('candidate_id')
-            ->pluck('total', 'candidate_id')
+        // 3. Suara per kandidat via Eloquent aggregation (100% Parameterized & Type-Safe)
+        $votesMap = Candidate::where('election_category_id', $category->id)
+            ->withCount('ballots')
+            ->pluck('ballots_count', 'id')
             ->toArray();
 
         $candidatesData = [];
@@ -291,12 +288,23 @@ class ElectionReportController extends Controller
             $candidatesData[] = $candItem;
         }
 
-        // Tentukan status pemenang (definitif vs sementara)
-        if ($isTie) {
+        $isAklamasi = ($sortedCandidates->count() === 1);
+        $isNihil = ($sortedCandidates->count() === 0);
+
+        // Tentukan status pemenang (Aklamasi vs Kompetisi)
+        if ($isAklamasi) {
+            $winnerData = $candidatesData[0] ?? null;
+            if ($winnerData) {
+                $winnerData['is_definitive'] = true;
+                $winnerData['is_aklamasi'] = true;
+                $winnerData['notes'] = 'Ditetapkan Secara Aklamasi (Calon Tunggal)';
+            }
+        } elseif ($isTie) {
             $winnerData = null; // Hasil imbang
         } elseif ($winnerData) {
             // Pemenang hanya definitif jika waktu pemilihan telah habis / ditutup
             $winnerData['is_definitive'] = $isEnded;
+            $winnerData['is_aklamasi'] = false;
         }
 
         $turnoutPercentage = $categoryDPT > 0 ? round(($totalBallots / $categoryDPT) * 100, 2) : 0;
@@ -313,7 +321,7 @@ class ElectionReportController extends Controller
         // Format tanggal & batas waktu habis
         $endTimeFormatted = $category->end_at
             ? $category->end_at->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i') . ' WIB'
-            : ($category->status_override === 'FORCE_CLOSED' ? 'Ditutup Panitia' : 'Sesuai Jadwal Pleno');
+            : ($category->status_override === 'FORCE_CLOSED' ? 'Ditutup Panitia' : ($isAklamasi ? 'Penetapan Aklamasi' : 'Sesuai Jadwal Pleno'));
 
         return [
             'category' => $category,
@@ -327,6 +335,8 @@ class ElectionReportController extends Controller
             'not_voted_percentage' => $notVotedPercentage,
             'candidates' => $candidatesData,
             'winner' => $winnerData,
+            'is_aklamasi' => $isAklamasi,
+            'is_nihil' => $isNihil,
             'is_tie' => $isTie,
             'is_ended' => $isEnded,
             'is_ongoing' => $isOngoing,

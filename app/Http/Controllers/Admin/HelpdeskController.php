@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TolakSengketaRequest;
 use App\Models\KodePendaftaran;
 use App\Models\Sengketa;
 use App\Models\SystemPhase;
 use App\Models\Voter;
 use App\Services\AuditLogger;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class HelpdeskController extends Controller
@@ -23,7 +25,8 @@ class HelpdeskController extends Controller
         }
         $search = $request->input('nim') ?? $request->input('search');
         if (!empty($search)) {
-            $query->where('nim', 'like', '%' . trim($search) . '%');
+            $escaped = addcslashes(trim($search), '%_\\');
+            $query->where('nim', 'like', '%' . $escaped . '%');
         }
 
         $sengketas = $query->paginate(20)->withQueryString();
@@ -120,10 +123,8 @@ class HelpdeskController extends Controller
     }
 
     /** Tolak laporan sengketa dengan catatan. */
-    public function tolakSengketa(Request $request, Sengketa $sengketa)
+    public function tolakSengketa(TolakSengketaRequest $request, Sengketa $sengketa)
     {
-        $request->validate(['catatan_tolak' => 'required|string|min:10|max:500']);
-
         $sengketa->update([
             'status'          => 'selesai',
             'catatan_petugas' => 'DITOLAK: ' . $request->catatan_tolak,
@@ -174,4 +175,38 @@ class HelpdeskController extends Controller
             ->with('kode_plain', $plainKode)
             ->with('success', 'Kode berhasil diterbitkan. Catat dan berikan kepada pemilik asli NIM. Kode ini TIDAK bisa ditampilkan lagi.');
     }
+
+    /**
+     * Download / pratinjau bukti KTM privat dari storage aman.
+     * Hanya dapat diakses oleh petugas helpdesk/admin yang terotentikasi & lolos 2FA.
+     */
+    public function downloadKtm(Sengketa $sengketa)
+    {
+        if (empty($sengketa->bukti_ktm_path) || !Storage::disk('local')->exists($sengketa->bukti_ktm_path)) {
+            abort(404, 'Lampiran bukti KTM tidak ditemukan pada media penyimpanan aman.');
+        }
+
+        $fullPath = Storage::disk('local')->path($sengketa->bukti_ktm_path);
+        $mime = mime_content_type($fullPath) ?: 'application/octet-stream';
+        $ext = pathinfo($fullPath, PATHINFO_EXTENSION);
+
+        AuditLogger::log(
+            'KTM_ACCESSED',
+            "Petugas #" . auth()->guard('web')->id() . " melihat lampiran bukti KTM sengketa #{$sengketa->id} (NIM: {$sengketa->nim})."
+        );
+
+        $response = response()->file($fullPath, [
+            'Content-Type' => $mime,
+            'Content-Disposition' => 'inline; filename="KTM-' . $sengketa->nim . '.' . $ext . '"',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+
+        $response->setPrivate();
+        $response->headers->addCacheControlDirective('no-cache', true);
+        $response->headers->addCacheControlDirective('no-store', true);
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+
+        return $response;
+    }
 }
+

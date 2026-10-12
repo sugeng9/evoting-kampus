@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VoterPinLoginRequest;
 use App\Models\AuditLog;
 use App\Models\Voter;
 use Illuminate\Http\Request;
@@ -26,80 +27,109 @@ class VoterAuthController extends Controller
 
 
 
-        if (app()->environment('local')) {
-            try {
-                \Illuminate\Support\Facades\Cache::flush();
-            } catch (\Throwable $e) {}
-        }
-
         $phase = \App\Models\SystemPhase::current();
+
+        // Siapkan data mahasiswa demo untuk pengujian pendaftaran
+        \App\Models\PemilihMaster::ensureRegistrationDummyData();
+        $dummyStudents = \App\Models\PemilihMaster::getRegistrationDummyList();
+        foreach ($dummyStudents as &$student) {
+            $existing = \App\Models\Voter::where('nim', $student['nim'])->first();
+            $student['is_registered'] = ($existing && $existing->pendaftaran_status === 'aktif' && $existing->registered_at !== null && $existing->email !== null);
+        }
+        unset($student);
 
         return view('voter.login', [
             'phase' => $phase,
             'fase' => $phase->fase,
             'allowsPendaftaran' => $phase->allowsPendaftaran(),
+            'dummyStudents' => $dummyStudents,
         ]);
     }
 
     /**
      * Proses Login Mahasiswa dengan Anti-Brute Force Rate Limiting
      */
-    public function login(Request $request)
+    public function login(VoterPinLoginRequest $request)
     {
-        // 1. Sanitasi & Validasi Input
-        $request->validate([
-            'nim' => ['required', 'string', 'max:20', 'regex:/^[a-zA-Z0-9_\-\.]+$/'],
-            'pin' => ['required', 'string', 'min:4', 'max:64'],
-        ], [
-            'nim.required' => 'NIM wajib diisi.',
-            'nim.regex' => 'Format NIM hanya boleh berupa kombinasi huruf dan angka.',
-            'pin.required' => 'Kata sandi akun wajib diisi.',
-        ]);
-
         $nim = trim($request->input('nim'));
         $pin = trim($request->input('pin'));
 
-        // 2. Proteksi Brute Force: Batasi 20 percobaan gagal per 5 menit per IP & NIM
+        // 1. Proteksi Credential Stuffing: Batasi maksimal 10 percobaan per menit per alamat IP
+        $ipThrottleKey = 'voter-login-ip:' . $request->ip();
+        if (RateLimiter::tooManyAttempts($ipThrottleKey, 10)) {
+            $ipSeconds = RateLimiter::availableIn($ipThrottleKey);
+            AuditLog::log('LOGIN_IP_RATE_LIMITED', 'voter', null, [
+                'ip' => $request->ip(),
+                'retry_after' => $ipSeconds,
+            ]);
+
+            return back()->withErrors([
+                'nim' => "Terlalu banyak percobaan login dari alamat IP Anda (indikasi brute force/credential stuffing). Silakan tunggu {$ipSeconds} detik sebelum mencoba kembali.",
+            ])->onlyInput('nim');
+        }
+
+        // 2. Proteksi Brute Force: Batasi 3 percobaan gagal per 7 menit per kombinasi NIM + IP
         $throttleKey = 'voter-login:' . Str::lower($nim) . '|' . $request->ip();
 
-        if (RateLimiter::tooManyAttempts($throttleKey, 20)) {
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
             $seconds = RateLimiter::availableIn($throttleKey);
+            $minutes = max(1, (int) ceil($seconds / 60));
             
             AuditLog::log('LOGIN_RATE_LIMIT_TRIGGERED', 'voter', null, [
                 'nim' => $nim,
                 'retry_after' => $seconds,
+                'ip' => $request->ip(),
             ]);
 
             return back()->withErrors([
-                'nim' => "Terlalu banyak percobaan login yang gagal. Akun Anda dikunci sementara selama {$seconds} detik demi keamanan.",
+                'nim' => "Terlalu banyak percobaan login gagal (3x). Akses login Anda dikunci sementara. Sisa waktu lockout: {$minutes} menit ({$seconds} detik).",
             ])->onlyInput('nim');
         }
 
         // 3. Cari Data Mahasiswa di DPT
         $voter = Voter::where('nim', $nim)->first();
 
+        // Anti Timing-Attack: Hash bcrypt valid untuk menyerap perbedaan waktu eksekusi saat NIM tidak ditemukan
+        $dummyBcryptHash = '$2y$10$w8gJ5T6L27N6YtEw1eB.Iu8rF8qO8m8h5qT2v6Z1x3w7y9z0a1b2c';
+        $genericLoginError = 'NIM atau kata sandi/PIN tidak cocok atau belum terdaftar.';
+
         if (!$voter) {
-            RateLimiter::hit($throttleKey, 300);
+            // Anti Timing-Attack: Jalankan komputasi bcrypt berbeban identik
+            Hash::check($pin, $dummyBcryptHash);
+
+            RateLimiter::hit($ipThrottleKey, 60);
+            RateLimiter::hit($throttleKey, 420); // 7 menit penalti lockout
+            $remaining = max(0, 3 - RateLimiter::attempts($throttleKey));
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $minutes = max(1, (int) ceil($seconds / 60));
+            $warning = $remaining > 0 ? " Sisa kesempatan: {$remaining}x sebelum dikunci 7 menit." : " Akun dikunci sementara. Sisa waktu penalti: {$minutes} menit ({$seconds} detik).";
 
             AuditLog::log('LOGIN_FAILED_NIM_NOT_FOUND', 'voter', null, [
                 'nim' => $nim,
+                'ip' => $request->ip(),
             ]);
 
             return back()->withErrors([
-                'nim' => "NIM '{$nim}' tidak terdaftar di DPT. Silakan lakukan pendaftaran akun pada tab 'Daftar Akun Baru' atau hubungi panitia KPU jika Anda mahasiswa aktif.",
+                'nim' => "{$genericLoginError}{$warning}",
             ])->onlyInput('nim');
         }
 
         // Verifikasi Kata Sandi / PIN Akun
         if (!Hash::check($pin, $voter->password)) {
-            RateLimiter::hit($throttleKey, 300);
+            RateLimiter::hit($ipThrottleKey, 60);
+            RateLimiter::hit($throttleKey, 420); // 7 menit penalti lockout
+            $remaining = max(0, 3 - RateLimiter::attempts($throttleKey));
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $minutes = max(1, (int) ceil($seconds / 60));
+            $warning = $remaining > 0 ? " Sisa kesempatan: {$remaining}x sebelum dikunci 7 menit." : " Akun dikunci sementara. Sisa waktu penalti: {$minutes} menit ({$seconds} detik).";
 
             AuditLog::log('LOGIN_FAILED_INVALID_PIN', 'voter', $voter->id, [
                 'nim' => $nim,
+                'ip' => $request->ip(),
             ]);
 
             return back()->withErrors([
-                'pin' => "NIM atau kata sandi/PIN yang Anda masukkan salah.",
+                'nim' => "{$genericLoginError}{$warning}",
             ])->onlyInput('nim');
         }
 

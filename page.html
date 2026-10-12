@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="ZVQNtIbExx2kRA2Gd6FmMNJJ16XsVUcouRh9ooXd">
+        <title>Login &amp; Pendaftaran Pemilih Mahasiswa - Sistem Pemira Terenkripsi</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+                        heading: ['"Outfit"', '"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        navy: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#090d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+            <!-- Cloudflare Turnstile Anti-Bot Security Widget -->
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background-color: #f8fafc;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+            letter-spacing: -0.025em;
+        }
+        .font-mono, code, kbd {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+
+    <!-- Client-side Anti-Clickjacking Frame Buster -->
+    <script>
+        if (top !== self) {
+            top.location = self.location;
+        }
+    </script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+
+    
+    <!-- ========================================== -->
+    <!-- TOP NAVIGATION BAR (RESPONSIVE)            -->
+    <!-- ========================================== -->
+    <header class="bg-navy-900 border-b border-slate-800 text-white sticky top-0 z-40 shadow-md ">
+        
+        
+        <!-- STANDARD NAVBAR (FOR MOBILE & VOTERS / PUBLIC) -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between ">
+            <a href="http://127.0.0.1:8000/auth-pemira" class="flex items-center space-x-3">
+                <div class="inline-flex items-center space-x-3 select-none">
+    <!-- EMBLEM / SEAL LOGO ICON (HANDCRAFTED VECTOR ART) -->
+    <div class="w-9 h-9 relative flex items-center justify-center flex-shrink-0 group">
+        <!-- Ambient Glow Effect -->
+        <div class="absolute -inset-1 bg-gradient-to-tr from-emerald-500/40 via-teal-400/30 to-amber-400/20 rounded-2xl blur-md group-hover:blur-lg transition duration-300 opacity-80 pointer-events-none"></div>
+
+        <!-- Shield Container -->
+        <div class="relative w-full h-full rounded-2xl bg-gradient-to-br from-navy-900 via-slate-900 to-emerald-950 p-[1.5px] shadow-xl border border-white/10 overflow-hidden flex items-center justify-center">
+            
+            <!-- Subtle Radial Gradient Background -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent"></div>
+
+            <!-- Master Vector Art Emblem -->
+            <svg class="w-6 h-6 relative z-10 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Gradien Warna Utama Logo -->
+                    <linearGradient id="pemiShieldGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#059669"/>
+                        <stop offset="50%" stop-color="#10B981"/>
+                        <stop offset="100%" stop-color="#06B6D4"/>
+                    </linearGradient>
+
+                    <linearGradient id="pemiGoldGrad" x1="16" y1="8" x2="32" y2="28" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FDE047"/>
+                        <stop offset="50%" stop-color="#F59E0B"/>
+                        <stop offset="100%" stop-color="#D97706"/>
+                    </linearGradient>
+
+                    <linearGradient id="pemiPaperGrad" x1="18" y1="6" x2="30" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#D1FAE5"/>
+                    </linearGradient>
+
+                    <filter id="pemiGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#10B981" flood-opacity="0.4"/>
+                    </filter>
+                </defs>
+
+                <!-- 1. Perisai Geometris Luar (Shield of Integrity) -->
+                <path d="M24 3L40 9V22C40 32.5 33.2 41.8 24 45C14.8 41.8 8 32.5 8 22V9L24 3Z" 
+                      fill="url(#pemiShieldGrad)" 
+                      fill-opacity="0.15" 
+                      stroke="url(#pemiShieldGrad)" 
+                      stroke-width="1.8" 
+                      stroke-linejoin="round"/>
+
+                <!-- 2. Sayap Laurel Demokrasi Minimalis (Kiri & Kanan) -->
+                <!-- Daun Kiri -->
+                <path d="M13 18C13 18 15 21 15 25C15 29 13 32 13 32C13 32 17 31 18 27C19 23 18 19 18 19" 
+                      fill="url(#pemiGoldGrad)" 
+                      opacity="0.9"/>
+                <circle cx="14" cy="15" r="1.3" fill="url(#pemiGoldGrad)"/>
+                <circle cx="12" cy="22" r="1.2" fill="url(#pemiGoldGrad)"/>
+                <circle cx="13" cy="29" r="1.2" fill="url(#pemiGoldGrad)"/>
+
+                <!-- Daun Kanan -->
+                <path d="M35 18C35 18 33 21 33 25C33 29 35 32 35 32C35 32 31 31 30 27C29 23 30 19 30 19" 
+                      fill="url(#pemiGoldGrad)" 
+                      opacity="0.9"/>
+                <circle cx="34" cy="15" r="1.3" fill="url(#pemiGoldGrad)"/>
+                <circle cx="36" cy="22" r="1.2" fill="url(#pemiGoldGrad)"/>
+                <circle cx="35" cy="29" r="1.2" fill="url(#pemiGoldGrad)"/>
+
+                <!-- 3. Kotak Suara Digital (Ballot Box 3D Isometric) -->
+                <!-- Badan Kotak Suara -->
+                <rect x="16" y="22" width="16" height="15" rx="3.5" 
+                      fill="#0F172A" 
+                      stroke="url(#pemiShieldGrad)" 
+                      stroke-width="1.8"/>
+
+                <!-- Aksen Garis & Kunci Gembok Digital pada Kotak -->
+                <line x1="16" y1="27" x2="32" y2="27" stroke="url(#pemiShieldGrad)" stroke-width="1" opacity="0.6"/>
+                <circle cx="24" cy="32" r="1.6" fill="url(#pemiGoldGrad)"/>
+                <path d="M24 33.6V35" stroke="url(#pemiGoldGrad)" stroke-width="1.2" stroke-linecap="round"/>
+
+                <!-- 4. Surat Suara Masuk (Ballot Cast with Checkmark) -->
+                <!-- Kertas Suara Melayang Masuk Celah -->
+                <path d="M19 10C19 8.89543 19.8954 8 21 8H27C28.1046 8 29 8.89543 29 10V22H19V10Z" 
+                      fill="url(#pemiPaperGrad)" 
+                      stroke="#FFFFFF" 
+                      stroke-width="1" 
+                      filter="url(#pemiGlow)"/>
+
+                <!-- Cap Centang Emas Kedaulatan Mahasiswa -->
+                <path d="M21.5 14L23.5 16.2L26.8 12.5" 
+                      stroke="url(#pemiGoldGrad)" 
+                      stroke-width="1.8" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"/>
+
+                <!-- Celah Kotak Suara (Slot) -->
+                <rect x="18" y="21" width="12" height="2" rx="1" fill="#020617" stroke="url(#pemiShieldGrad)" stroke-width="0.8"/>
+
+                <!-- 5. Bintang Kejujuran & Transparansi 4-Sumbu di Puncak (Star of Truth) -->
+                <path d="M24 2.5L25 5L27.5 6L25 7L24 9.5L23 7L20.5 6L23 5L24 2.5Z" 
+                      fill="url(#pemiGoldGrad)"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- TYPOGRAPHY / LOGO TEXT -->
+            <div class="flex flex-col min-w-0">
+            <span class="font-heading font-black text-sm text-white tracking-tight leading-none uppercase truncate">
+                PEMIRA POLBENG
+            </span>
+            <span class="font-sans font-bold text-[10px] text-emerald-400 tracking-wider uppercase mt-1 truncate">
+                Sistem E-Voting Kampus
+            </span>
+        </div>
+    </div>
+            </a>
+
+            <!-- Desktop Nav Menu (For Voters / Public) -->
+            <div class="hidden sm:flex items-center space-x-5">
+                <a href="http://127.0.0.1:8000/auth-pemira?tab=register" class="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white transition">
+                    Pendaftaran Pemilih
+                </a>
+                <a href="http://127.0.0.1:8000/nim-status" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
+                    Cek Status NIM
+                </a>
+                <a href="http://127.0.0.1:8000/verify-ballot" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
+                    Audit Kuitansi
+                </a>
+                <a href="http://127.0.0.1:8000/quick-count" class="text-xs sm:text-sm text-slate-300 hover:text-white transition">
+                    Quick Count
+                </a>
+                                    <button type="button" onclick="openHelpdeskModal('chat')" class="text-xs sm:text-sm font-semibold text-slate-200 hover:text-white transition flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 border border-slate-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                        <span>Bantuan &amp; Chat</span>
+                    </button>
+                
+                                    
+                            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <div class="flex sm:hidden items-center">
+                <button type="button" 
+                        onclick="toggleMobileMenu()" 
+                        class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none transition" 
+                        aria-label="Toggle menu">
+                    <svg id="hamburgerIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <svg id="closeMenuIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobileMenu" class="hidden sm:hidden border-t border-slate-800 bg-navy-950/95 backdrop-blur-md px-4 pt-3 pb-5 space-y-2">
+            <a href="http://127.0.0.1:8000/auth-pemira?tab=register" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Pendaftaran Pemilih
+            </a>
+            <a href="http://127.0.0.1:8000/nim-status" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Cek Status Kepemilikan NIM
+            </a>
+            <a href="http://127.0.0.1:8000/verify-ballot" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Audit Kuitansi Suara
+            </a>
+            <a href="http://127.0.0.1:8000/quick-count" class="block px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition">
+                Hasil Quick Count
+            </a>
+                            <button type="button" onclick="toggleMobileMenu(); openHelpdeskModal('chat');" class="w-full text-left px-3 py-2 rounded-xl text-sm font-semibold text-slate-200 hover:bg-slate-800 transition flex items-center justify-between">
+                    <span>Pusat Bantuan &amp; Live Chat</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                </button>
+            
+                            
+                    </div>
+    </header>
+
+    <!-- Flash Alerts -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 w-full">
+        
+        
+            </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        
+<div class="max-w-lg mx-auto my-6 sm:my-10 px-3 sm:px-0">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/90 overflow-hidden">
+        
+        <!-- Header Banner Resmi Institusional -->
+        <div class="bg-slate-900 p-6 sm:p-7 text-white text-center border-b border-slate-800">
+            <div class="flex justify-center mb-1">
+                <div class="inline-flex items-center space-x-3 select-none">
+    <!-- EMBLEM / SEAL LOGO ICON (HANDCRAFTED VECTOR ART) -->
+    <div class="w-14 h-14 sm:w-16 sm:h-16 relative flex items-center justify-center flex-shrink-0 group">
+        <!-- Ambient Glow Effect -->
+        <div class="absolute -inset-1 bg-gradient-to-tr from-emerald-500/40 via-teal-400/30 to-amber-400/20 rounded-2xl blur-md group-hover:blur-lg transition duration-300 opacity-80 pointer-events-none"></div>
+
+        <!-- Shield Container -->
+        <div class="relative w-full h-full rounded-2xl bg-gradient-to-br from-navy-900 via-slate-900 to-emerald-950 p-[1.5px] shadow-xl border border-white/10 overflow-hidden flex items-center justify-center">
+            
+            <!-- Subtle Radial Gradient Background -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-500/20 via-transparent to-transparent"></div>
+
+            <!-- Master Vector Art Emblem -->
+            <svg class="w-9 h-9 sm:w-10 sm:h-10 relative z-10 filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Gradien Warna Utama Logo -->
+                    <linearGradient id="pemiShieldGrad" x1="4" y1="4" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#059669"/>
+                        <stop offset="50%" stop-color="#10B981"/>
+                        <stop offset="100%" stop-color="#06B6D4"/>
+                    </linearGradient>
+
+                    <linearGradient id="pemiGoldGrad" x1="16" y1="8" x2="32" y2="28" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FDE047"/>
+                        <stop offset="50%" stop-color="#F59E0B"/>
+                        <stop offset="100%" stop-color="#D97706"/>
+                    </linearGradient>
+
+                    <linearGradient id="pemiPaperGrad" x1="18" y1="6" x2="30" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="100%" stop-color="#D1FAE5"/>
+                    </linearGradient>
+
+                    <filter id="pemiGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="#10B981" flood-opacity="0.4"/>
+                    </filter>
+                </defs>
+
+                <!-- 1. Perisai Geometris Luar (Shield of Integrity) -->
+                <path d="M24 3L40 9V22C40 32.5 33.2 41.8 24 45C14.8 41.8 8 32.5 8 22V9L24 3Z" 
+                      fill="url(#pemiShieldGrad)" 
+                      fill-opacity="0.15" 
+                      stroke="url(#pemiShieldGrad)" 
+                      stroke-width="1.8" 
+                      stroke-linejoin="round"/>
+
+                <!-- 2. Sayap Laurel Demokrasi Minimalis (Kiri & Kanan) -->
+                <!-- Daun Kiri -->
+                <path d="M13 18C13 18 15 21 15 25C15 29 13 32 13 32C13 32 17 31 18 27C19 23 18 19 18 19" 
+                      fill="url(#pemiGoldGrad)" 
+                      opacity="0.9"/>
+                <circle cx="14" cy="15" r="1.3" fill="url(#pemiGoldGrad)"/>
+                <circle cx="12" cy="22" r="1.2" fill="url(#pemiGoldGrad)"/>
+                <circle cx="13" cy="29" r="1.2" fill="url(#pemiGoldGrad)"/>
+
+                <!-- Daun Kanan -->
+                <path d="M35 18C35 18 33 21 33 25C33 29 35 32 35 32C35 32 31 31 30 27C29 23 30 19 30 19" 
+                      fill="url(#pemiGoldGrad)" 
+                      opacity="0.9"/>
+                <circle cx="34" cy="15" r="1.3" fill="url(#pemiGoldGrad)"/>
+                <circle cx="36" cy="22" r="1.2" fill="url(#pemiGoldGrad)"/>
+                <circle cx="35" cy="29" r="1.2" fill="url(#pemiGoldGrad)"/>
+
+                <!-- 3. Kotak Suara Digital (Ballot Box 3D Isometric) -->
+                <!-- Badan Kotak Suara -->
+                <rect x="16" y="22" width="16" height="15" rx="3.5" 
+                      fill="#0F172A" 
+                      stroke="url(#pemiShieldGrad)" 
+                      stroke-width="1.8"/>
+
+                <!-- Aksen Garis & Kunci Gembok Digital pada Kotak -->
+                <line x1="16" y1="27" x2="32" y2="27" stroke="url(#pemiShieldGrad)" stroke-width="1" opacity="0.6"/>
+                <circle cx="24" cy="32" r="1.6" fill="url(#pemiGoldGrad)"/>
+                <path d="M24 33.6V35" stroke="url(#pemiGoldGrad)" stroke-width="1.2" stroke-linecap="round"/>
+
+                <!-- 4. Surat Suara Masuk (Ballot Cast with Checkmark) -->
+                <!-- Kertas Suara Melayang Masuk Celah -->
+                <path d="M19 10C19 8.89543 19.8954 8 21 8H27C28.1046 8 29 8.89543 29 10V22H19V10Z" 
+                      fill="url(#pemiPaperGrad)" 
+                      stroke="#FFFFFF" 
+                      stroke-width="1" 
+                      filter="url(#pemiGlow)"/>
+
+                <!-- Cap Centang Emas Kedaulatan Mahasiswa -->
+                <path d="M21.5 14L23.5 16.2L26.8 12.5" 
+                      stroke="url(#pemiGoldGrad)" 
+                      stroke-width="1.8" 
+                      stroke-linecap="round" 
+                      stroke-linejoin="round"/>
+
+                <!-- Celah Kotak Suara (Slot) -->
+                <rect x="18" y="21" width="12" height="2" rx="1" fill="#020617" stroke="url(#pemiShieldGrad)" stroke-width="0.8"/>
+
+                <!-- 5. Bintang Kejujuran & Transparansi 4-Sumbu di Puncak (Star of Truth) -->
+                <path d="M24 2.5L25 5L27.5 6L25 7L24 9.5L23 7L20.5 6L23 5L24 2.5Z" 
+                      fill="url(#pemiGoldGrad)"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- TYPOGRAPHY / LOGO TEXT -->
+    </div>
+            </div>
+
+            <div class="inline-flex items-center space-x-1.5 px-3 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[11px] font-mono font-semibold uppercase tracking-wider mt-3 mb-1 border border-slate-700">
+                <span>Bilik Suara Resmi</span>
+                <span>&bull;</span>
+                <span>Polbeng</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-white">Portal Pemira Mahasiswa</h2>
+            <p class="text-xs text-slate-400 mt-1">Otentikasi &amp; Pendaftaran Mandiri Hak Suara Digital</p>
+            
+                            <div class="mt-2.5">
+                    <span class="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-mono border border-slate-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                        <span>Fase Sistem: <strong class="text-white uppercase">pendaftaran</strong></span>
+                    </span>
+                </div>
+                    </div>
+
+        <!-- Tab Switcher (Masuk vs Daftar) -->
+        <div class="px-5 sm:px-6 pt-5 pb-2">
+            <div class="flex p-1 bg-slate-100 rounded-xl border border-slate-200">
+                <button type="button" 
+                        id="tab-btn-login" 
+                        onclick="switchTab('login')" 
+                        class="flex-1 py-2.5 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 bg-white text-slate-900 shadow-sm border border-slate-200">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                    </svg>
+                    <span>Masuk (Login)</span>
+                </button>
+                <button type="button" 
+                        id="tab-btn-register" 
+                        onclick="switchTab('register')" 
+                        class="flex-1 py-2.5 px-3 rounded-lg text-xs font-semibold transition flex items-center justify-center space-x-2 text-slate-500 hover:text-slate-800">
+                    <svg class="w-4 h-4 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                    <span>Daftar Akun Baru</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Body Container -->
+        <div class="p-5 sm:p-7 pt-3">
+
+            <!-- ========================================== -->
+            <!-- 1. PANEL LOGIN PEMILIH                     -->
+            <!-- ========================================== -->
+            <div id="panel-login" class="">
+                <form action="http://127.0.0.1:8000/auth-pemira" method="POST" id="loginForm" class="space-y-4">
+                    <input type="hidden" name="_token" value="ZVQNtIbExx2kRA2Gd6FmMNJJ16XsVUcouRh9ooXd" autocomplete="off">
+                    <!-- Input NIM -->
+                    <div>
+                        <label for="login_nim" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                            Nomor Induk Mahasiswa (NIM)
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            </div>
+                            <input type="text" 
+                                   name="nim" 
+                                   id="login_nim" 
+                                   value="" 
+                                   required 
+                                   autocomplete="username"
+                                   placeholder="Contoh: 120120045" 
+                                   class="w-full pl-11 pr-4 py-3 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition text-sm">
+                        </div>
+                                            </div>
+
+                    <!-- Input Kata Sandi Akun Pemilih -->
+                    <div>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label for="login_pin" class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                                Kata Sandi (Password Akun)
+                            </label>
+                            <span class="text-[11px] text-slate-400">Password / PIN Akun</span>
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                                </svg>
+                            </div>
+                            <input type="password" 
+                                   name="pin" 
+                                   id="login_pin" 
+                                   value=""
+                                   required 
+                                   autocomplete="current-password"
+                                   placeholder="Masukkan Kata Sandi akun Anda" 
+                                   class="w-full pl-11 pr-11 py-3 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition text-sm">
+                            <button type="button" 
+                                    onclick="toggleInputVisibility('login_pin', 'loginEyeIcon')" 
+                                    class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none"
+                                    aria-label="Toggle password visibility">
+                                <svg id="loginEyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                            </button>
+                        </div>
+                                            </div>
+
+                    <!-- Anti-Fraud Notice -->
+                    <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-amber-900 text-xs leading-relaxed flex items-start space-x-2.5">
+                        <svg class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                        </svg>
+                        <span><strong>1 NIM = 1 Suara.</strong> Sesi bilik suara terenkripsi dan terlindung dari akses ganda secara bersamaan.</span>
+                    </div>
+
+                                            <!-- Cloudflare Turnstile Anti-Bot Protection -->
+                        <div class="flex flex-col items-center justify-center my-1">
+                            <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light"></div>
+                                                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                            id="loginSubmitBtn" 
+                            class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center space-x-2 text-xs">
+                        <span id="loginBtnText">Masuk ke Bilik Suara</span>
+                        <svg id="loginBtnSpinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Switch to Register -->
+                    <div class="pt-3 border-t border-slate-100 text-center space-y-2.5">
+                        <div class="text-xs text-slate-500">
+                            Belum terdaftar sebagai pemilih?
+                            <button type="button" onclick="switchTab('register')" class="font-bold text-indigo-600 hover:text-indigo-700 hover:underline ml-1">
+                                Daftar Akun Baru Sekarang &rarr;
+                            </button>
+                        </div>
+
+                        <div>
+                            <a href="http://127.0.0.1:8000/nim-status" class="inline-flex items-center space-x-1.5 py-1.5 px-3 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs border border-slate-200 transition">
+                                <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                <span>Cek Status Kepemilikan NIM</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- 2. PANEL PENDAFTARAN PEMILIH MANDIRI       -->
+            <!-- ========================================== -->
+            <div id="panel-register" class="hidden">
+                                    <!-- Data Mahasiswa Dummy untuk Uji Coba Pendaftaran Mandiri -->
+                                        <div class="mb-5 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-200/80">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Akun Demo Pengujian Pendaftaran</span>
+                                <span class="text-[11px] text-slate-500">Data resmi master mahasiswa (BAAK) siap diuji coba</span>
+                            </div>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">5 Jurusan</span>
+                        </div>
+
+                        <div class="space-y-2">
+                                                            <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">120140901</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">Rizky Perdana</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">Teknik Informatika</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">2004-05-15</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                                                                    <button type="button" 
+                                                    onclick="fillTestRegistration('120140901', '2004-05-15', 'rizky.demo@polbeng.ac.id')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                                                            </div>
+                                </div>
+                                                            <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">120120902</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">Faisal Maulana</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">Teknik Mesin</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">2003-10-20</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                                                                    <button type="button" 
+                                                    onclick="fillTestRegistration('120120902', '2003-10-20', 'faisal.demo@polbeng.ac.id')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                                                            </div>
+                                </div>
+                                                            <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">120130903</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">Nadia Safitri</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">Teknik Elektro</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">2005-02-14</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                                                                    <button type="button" 
+                                                    onclick="fillTestRegistration('120130903', '2005-02-14', 'nadia.demo@polbeng.ac.id')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                                                            </div>
+                                </div>
+                                                            <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">120170904</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">Dimas Wahyudi</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">Administrasi Niaga</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">2004-08-08</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                                                                    <button type="button" 
+                                                    onclick="fillTestRegistration('120170904', '2004-08-08', 'dimas.demo@polbeng.ac.id')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                                                            </div>
+                                </div>
+                                                            <div class="p-2.5 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                                    <div class="min-w-0">
+                                        <div class="flex items-center space-x-2">
+                                            <span class="font-mono font-bold text-slate-900 text-[11px]">120190905</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span class="font-semibold text-slate-800 truncate">Arya Samudra</span>
+                                        </div>
+                                        <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-x-2 mt-0.5">
+                                            <span class="text-slate-600">Kemaritiman</span>
+                                            <span class="text-slate-300">&bull;</span>
+                                            <span>Lahir: <strong class="text-slate-700 font-mono">2004-12-01</strong></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center space-x-2 flex-shrink-0 self-end sm:self-auto">
+                                                                                    <button type="button" 
+                                                    onclick="fillTestRegistration('120190905', '2004-12-01', 'arya.demo@polbeng.ac.id')"
+                                                    class="text-[11px] font-semibold text-slate-800 bg-slate-100 hover:bg-slate-900 hover:text-white border border-slate-300 px-2.5 py-1 rounded-lg transition flex items-center space-x-1 shadow-sm">
+                                                <span>Gunakan Data</span>
+                                                <span class="font-mono">&rarr;</span>
+                                            </button>
+                                                                            </div>
+                                </div>
+                                                    </div>
+                        <p class="text-[10px] text-slate-400 mt-2.5 italic leading-tight">
+                            *Tips: Klik <strong>"Gunakan Data"</strong> untuk mengisi NIM, Tanggal Lahir, dan Kata Sandi secara otomatis. Anda juga dapat mengganti alamat email ke email pribadi Anda jika ingin menerima OTP di email Anda.
+                        </p>
+                    </div>
+                    
+                    <form action="http://127.0.0.1:8000/daftar/otp" method="POST" id="registerForm" class="space-y-4">
+                        <input type="hidden" name="_token" value="ZVQNtIbExx2kRA2Gd6FmMNJJ16XsVUcouRh9ooXd" autocomplete="off">
+                        <!-- Anti-Bot Honeypot Trap & Time Token (Tersembunyi dari manusia) -->
+                        <div style="position: absolute; left: -9999px; top: -9999px; opacity: 0; pointer-events: none;" aria-hidden="true">
+                            <input type="text" name="website_trap" tabindex="-1" autocomplete="off" value="">
+                            <input type="hidden" name="form_time" value="eyJpdiI6IlU4UjBNMHJuWWp2Y255cUtTUTR0bGc9PSIsInZhbHVlIjoiQWhmUHBCVkZucFJoSjVDeDVzTG1RQT09IiwibWFjIjoiNzE4MjM1MzZkOTc2YjdlZWFhNjhlZDVkMDhmMjhlZjVjNzRjODJjYWZjYjAzYTc2NmZhM2JkNWFmYzQ3ZjEyZSIsInRhZyI6IiJ9">
+                        </div>
+
+                        
+                        <!-- NIM Mahasiswa -->
+                        <div>
+                            <label for="reg_nim" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Nomor Induk Mahasiswa (NIM)
+                            </label>
+                            <input type="text" 
+                                   name="nim" 
+                                   id="reg_nim" 
+                                   value="" 
+                                   required 
+                                   placeholder="Contoh: 120510001 (sesuai KTM)" 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                                                    </div>
+
+                        <!-- Tanggal Lahir -->
+                        <div>
+                            <label for="reg_dob" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Tanggal Lahir Mahasiswa
+                            </label>
+                            <input type="date" 
+                                   name="tanggal_lahir" 
+                                   id="reg_dob" 
+                                   value="" 
+                                   required 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                            <p class="mt-1 text-[11px] text-slate-400">Dibutuhkan untuk validasi data akademik Polbeng.</p>
+                                                    </div>
+
+                        <!-- Email Pribadi -->
+                        <div>
+                            <label for="reg_email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Alamat Email Pribadi Aktif
+                            </label>
+                            <input type="email" 
+                                   name="email" 
+                                   id="reg_email" 
+                                   value="" 
+                                   required 
+                                   placeholder="mahasiswa@gmail.com" 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                            <p class="mt-1 text-[11px] text-slate-400">Kode OTP 6-digit untuk verifikasi akun akan dikirimkan ke email ini.</p>
+                                                    </div>
+
+                        <!-- No HP / WhatsApp (Opsional) -->
+                        <div>
+                            <label for="reg_phone" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Nomor HP / WhatsApp <span class="text-slate-400 font-normal lowercase">(opsional)</span>
+                            </label>
+                            <input type="tel" 
+                                   name="no_hp" 
+                                   id="reg_phone" 
+                                   value="" 
+                                   placeholder="Contoh: 081234567890" 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                                                    </div>
+
+                        <!-- Password Baru -->
+                        <div>
+                            <label for="reg_password" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Buat Kata Sandi (Password)
+                            </label>
+                            <div class="relative">
+                                <input type="password" 
+                                       name="password" 
+                                       id="reg_password" 
+                                       required 
+                                       autocomplete="new-password"
+                                       placeholder="Minimal 8 karakter kombinasi huruf & angka" 
+                                       class="w-full pl-3.5 pr-10 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                                <button type="button" 
+                                        onclick="toggleInputVisibility('reg_password', 'regEyeIcon')" 
+                                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none"
+                                        aria-label="Toggle password visibility">
+                                    <svg id="regEyeIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                                                    </div>
+
+                        <!-- Konfirmasi Password -->
+                        <div>
+                            <label for="reg_password_confirmation" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                                Konfirmasi Kata Sandi
+                            </label>
+                            <input type="password" 
+                                   name="password_confirmation" 
+                                   id="reg_password_confirmation" 
+                                   required 
+                                   autocomplete="new-password"
+                                   placeholder="Ulangi kata sandi di atas" 
+                                   class="w-full px-3.5 py-2.5 bg-slate-50 border  border-slate-300  rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition text-sm">
+                                                    </div>
+
+                                                    <!-- Cloudflare Turnstile Anti-Bot Protection -->
+                            <div class="flex flex-col items-center justify-center my-2">
+                                <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA" data-theme="light"></div>
+                                                            </div>
+                        
+                        <!-- Submit Button Pendaftaran -->
+                        <button type="submit" 
+                                id="regSubmitBtn" 
+                                class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-semibold rounded-xl shadow-sm transition flex items-center justify-center space-x-2 text-xs mt-2">
+                            <span id="regBtnText">Daftar &amp; Kirim Kode OTP &rarr;</span>
+                            <svg id="regBtnSpinner" class="hidden animate-spin w-4 h-4 text-white" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                            </svg>
+                        </button>
+
+                        <!-- Switch back to Login -->
+                        <div class="pt-3 border-t border-slate-100 text-center">
+                            <div class="text-xs text-slate-500">
+                                Sudah pernah mendaftar akun?
+                                <button type="button" onclick="switchTab('login')" class="font-bold text-emerald-600 hover:text-emerald-700 hover:underline ml-1">
+                                    Masuk di sini &rarr;
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                            </div>
+
+        </div>
+
+        <!-- Security Footer -->
+        <div class="px-8 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+            <span class="flex items-center space-x-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Enkripsi TLS 1.3 Aktif</span>
+            </span>
+            <span>Bilik Suara Terisolasi</span>
+        </div>
+    </div>
+
+    <!-- Helpdesk & Live Chat Quick Access Banner -->
+    <div class="mt-4 p-4 rounded-2xl bg-white border border-slate-200/90 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <div class="flex items-center space-x-3 text-left">
+            <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold flex-shrink-0 border border-slate-200">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+            </div>
+            <div>
+                <div class="flex items-center space-x-1.5">
+                    <span class="font-bold text-slate-800">Butuh Bantuan Kendala Akun / Pendaftaran?</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-0.5">Live chat &amp; WhatsApp panitia KPU-M siap mendampingi Anda.</p>
+            </div>
+        </div>
+        <button type="button" 
+                onclick="openHelpdeskModal('chat')" 
+                class="w-full sm:w-auto px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm text-xs flex-shrink-0">
+            <span>Buka Helpdesk</span>
+            <span>&rarr;</span>
+        </button>
+    </div>
+
+    <!-- Link ke Login Admin disembunyikan demi privasi & keamanan portal mahasiswa -->
+</div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 text-slate-500 py-6 mt-12 text-center text-xs ">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-700">Komisi Pemilihan Raya (KPR) &bull; Politeknik Negeri Bengkalis &copy; 2026</p>
+            <p class="text-slate-400">Dilindungi dengan Enkripsi SHA-256 &amp; Protokol Kotak Suara Anonim Terpisah (Secret Ballot Engine).</p>
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-slate-500 text-[11px]">
+                <a href="http://127.0.0.1:8000/auth-pemira" class="hover:text-slate-800 transition">Bilik Pemilih</a>
+                <span class="text-slate-300">&bull;</span>
+                <a href="http://127.0.0.1:8000/quick-count" class="hover:text-slate-800 transition">Live Quick Count</a>
+                <span class="text-slate-300">&bull;</span>
+                <a href="http://127.0.0.1:8000/verify-ballot" class="hover:text-slate-800 transition">Audit Kuitansi Suara</a>
+                                    <span class="text-slate-300">&bull;</span>
+                    <button type="button" onclick="openHelpdeskModal('chat')" class="text-slate-600 hover:text-slate-900 font-semibold transition">
+                        <span>Pusat Bantuan &amp; Chat</span>
+                    </button>
+                            </div>
+        </div>
+    </footer>
+
+            <!-- Floating Helpdesk & Modal Pusat Bantuan Pemilih Mahasiswa (HANYA DI HALAMAN LUAR / PUBLIK) -->
+        <!-- ======================================================== -->
+<!-- FLOATING HELPDESK & LIVE CHAT TRIGGER BUTTON             -->
+<!-- ======================================================== -->
+<div id="helpdeskFloatingWidget" class="fixed bottom-5 right-5 z-40 flex flex-col items-end select-none">
+    
+    <!-- Tooltip Notification / Greeting (Muncul singkat saat awal muat) -->
+    <div id="helpdeskGreetingBadge" class="hidden sm:flex items-center space-x-2 mb-2 px-3.5 py-1.5 bg-navy-950/95 text-white rounded-2xl shadow-xl border border-emerald-500/40 text-xs backdrop-blur-md animate-bounce">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="text-[11px] font-medium">Butuh bantuan? Tim KPU siap menjawab</span>
+        <button type="button" onclick="document.getElementById('helpdeskGreetingBadge').classList.add('hidden')" class="text-slate-400 hover:text-white ml-1 text-sm font-bold leading-none">&times;</button>
+    </div>
+
+    <!-- Main Floating Action Button (FAB) -->
+    <button type="button" 
+            onclick="openHelpdeskModal('chat')" 
+            id="helpdeskTriggerBtn"
+            class="group flex items-center space-x-2.5 px-4 py-3 bg-gradient-to-r from-emerald-600 via-teal-600 to-navy-900 hover:from-emerald-500 hover:to-teal-700 text-white rounded-2xl shadow-xl shadow-emerald-900/30 border border-emerald-400/40 transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-4 focus:ring-emerald-500/30"
+            aria-label="Pusat Bantuan & Live Chat Helpdesk">
+        
+        <!-- Live Chat Icon with Ping Indicator -->
+        <div class="relative flex items-center justify-center">
+            <svg class="w-5 h-5 text-white transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+            </svg>
+            <span class="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+            </span>
+        </div>
+
+        <div class="flex flex-col text-left">
+            <span class="text-xs font-black tracking-tight leading-tight flex items-center space-x-1">
+                <span>Bantuan &amp; Live Chat</span>
+            </span>
+            <span class="text-[9px] text-emerald-200 font-mono tracking-wider font-semibold uppercase leading-none mt-0.5">Online &bull; Polbeng</span>
+        </div>
+    </button>
+</div>
+
+<!-- ======================================================== -->
+<!-- MODAL PUSAT BANTUAN & HELPDESK MAHASISWA                 -->
+<!-- ======================================================== -->
+<div id="voterHelpdeskModal" 
+     class="fixed inset-0 z-50 hidden flex items-center justify-center p-3 sm:p-4 bg-slate-950/70 backdrop-blur-sm transition-opacity duration-300"
+     role="dialog" 
+     aria-modal="true" 
+     aria-labelledby="helpdeskModalTitle">
+    
+    <div class="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[85vh] animate-in fade-in zoom-in-95 duration-200">
+        
+        <!-- Header Banner Modal -->
+        <div class="bg-gradient-to-r from-navy-950 via-slate-900 to-navy-900 p-5 text-white relative overflow-hidden flex-shrink-0">
+            <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -left-8 -bottom-8 w-32 h-32 bg-teal-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+            <div class="flex items-center justify-between relative z-10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/30 flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h3 id="helpdeskModalTitle" class="text-base font-black text-white tracking-tight">Helpdesk Pemira Polbeng</h3>
+                            <span class="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                <span>Online</span>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-300 mt-0.5">Layanan Informasi &amp; Solusi Kendala Pemilih Mahasiswa</p>
+                    </div>
+                </div>
+
+                <!-- Tombol Tutup (X) -->
+                <button type="button" 
+                        onclick="closeHelpdeskModal()" 
+                        class="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition focus:outline-none"
+                        aria-label="Tutup jendela bantuan">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Jam Operasional Info Bar -->
+            <div class="mt-3 flex items-center justify-between text-[11px] text-slate-300 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700/80 font-mono">
+                <span class="flex items-center space-x-1.5">
+                    <span>🕒 Jam Layanan: <strong>08.00 - 17.00 WIB</strong></span>
+                </span>
+                <span>KPU-M Polbeng</span>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs (4 Fitur Helpdesk) -->
+        <div class="px-5 pt-4 pb-2 bg-slate-50 border-b border-slate-200 flex-shrink-0">
+            <div class="grid grid-cols-4 gap-1 p-1 bg-slate-200/80 rounded-2xl text-xs font-bold">
+                <button type="button" 
+                        id="helpdesk-tab-btn-chat" 
+                        onclick="switchHelpdeskTab('chat')" 
+                        class="py-2 px-1 rounded-xl transition flex items-center justify-center space-x-1 text-slate-900 bg-white shadow-sm border border-slate-200/60">
+                    <span>💬</span>
+                    <span class="truncate">Live Chat</span>
+                </button>
+                <button type="button" 
+                        id="helpdesk-tab-btn-wa" 
+                        onclick="switchHelpdeskTab('wa')" 
+                        class="py-2 px-1 rounded-xl transition flex items-center justify-center space-x-1 text-slate-600 hover:text-slate-900">
+                    <span>📱</span>
+                    <span class="truncate">WhatsApp</span>
+                </button>
+                <button type="button" 
+                        id="helpdesk-tab-btn-faq" 
+                        onclick="switchHelpdeskTab('faq')" 
+                        class="py-2 px-1 rounded-xl transition flex items-center justify-center space-x-1 text-slate-600 hover:text-slate-900">
+                    <span>❓</span>
+                    <span class="truncate">FAQ Kendala</span>
+                </button>
+                <button type="button" 
+                        id="helpdesk-tab-btn-sengketa" 
+                        onclick="switchHelpdeskTab('sengketa')" 
+                        class="py-2 px-1 rounded-xl transition flex items-center justify-center space-x-1 text-slate-600 hover:text-slate-900">
+                    <span>⚖️</span>
+                    <span class="truncate">Sengketa</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Modal Body (Scrollable Container) -->
+        <div class="p-5 sm:p-6 overflow-y-auto flex-1 space-y-4 text-slate-700">
+
+            <!-- ============================================== -->
+            <!-- 1. TAB LIVE CHAT (TAWK.TO INTEGRATION)         -->
+            <!-- ============================================== -->
+            <div id="helpdesk-panel-chat" class="space-y-4">
+                
+                                    <!-- Panduan / Status Tawk.to Free Live Chat -->
+                    <div class="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200 space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-lg shadow flex-shrink-0 mt-0.5">
+                                ⚡
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <div class="flex items-center space-x-2">
+                                    <h4 class="text-sm font-black text-indigo-950">Integrasi Live Chat Gratis (Tawk.to)</h4>
+                                    <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">100% Free</span>
+                                </div>
+                                <p class="text-xs text-indigo-900/80 mt-1 leading-relaxed">
+                                    Sistem telah mendukung widget obrolan langsung gratis menggunakan <strong>Tawk.to</strong> (tanpa batasan pesan &amp; tersedia aplikasi mobile gratis untuk panitia).
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 3 Langkah Aktivasi untuk Panitia / Admin -->
+                        <div class="p-3 bg-white rounded-xl border border-indigo-100 text-xs space-y-2">
+                            <span class="text-[11px] font-bold text-slate-800 block">Cara Menghubungkan Tawk.to ke Aplikasi:</span>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-600 text-[11px]">
+                                <li>Daftar akun gratis di <a href="https://www.tawk.to/" target="_blank" class="text-indigo-600 font-bold hover:underline">tawk.to &nearr;</a></li>
+                                <li>Masuk ke <strong>Administration &rarr; Chat Widget</strong> dan salin <strong>Property ID</strong> &amp; <strong>Widget ID</strong> Anda.</li>
+                                <li>Masukkan ke file <code class="bg-slate-100 px-1 py-0.5 rounded text-rose-600 font-mono font-bold">.env</code> pada baris: <code class="font-mono text-emerald-700">TAWKTO_PROPERTY_ID=...</code></li>
+                            </ol>
+                        </div>
+
+                        <!-- Fallback Cepat: WhatsApp Panitia -->
+                        <div class="pt-1">
+                            <button type="button" 
+                                    onclick="switchHelpdeskTab('wa')" 
+                                    class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-xs">
+                                <span>📱 Hubungi Petugas via WhatsApp Sekarang</span>
+                                <span>&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                
+                <!-- Kontak Alternatif Cepat -->
+                <div class="grid grid-cols-2 gap-3 pt-1">
+                    <button type="button" 
+                            onclick="switchHelpdeskTab('wa')" 
+                            class="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition flex items-center space-x-2.5">
+                        <span class="text-xl">📱</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 block">WhatsApp KPU</span>
+                            <span class="text-[10px] text-slate-500">Respon dalam 5 menit</span>
+                        </div>
+                    </button>
+                    <button type="button" 
+                            onclick="switchHelpdeskTab('faq')" 
+                            class="p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-left transition flex items-center space-x-2.5">
+                        <span class="text-xl">💡</span>
+                        <div>
+                            <span class="text-xs font-bold text-slate-900 block">FAQ &amp; Solusi</span>
+                            <span class="text-[10px] text-slate-500">Jawaban instan mandiri</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- 2. TAB WHATSAPP PANITIA KPU                     -->
+            <!-- ============================================== -->
+            <div id="helpdesk-panel-wa" class="hidden space-y-4">
+                <div class="p-4 bg-emerald-50/90 rounded-2xl border border-emerald-200 text-xs text-emerald-950 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <span class="font-extrabold text-emerald-900 flex items-center space-x-1.5">
+                            <span>📱 Layanan WhatsApp Resmi Helpdesk:</span>
+                        </span>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Aktif &bull; 08.00 - 17.00 WIB
+                        </span>
+                    </div>
+                    <div class="flex items-center justify-between flex-wrap gap-2 pt-1 bg-white/80 p-3 rounded-xl border border-emerald-200/80">
+                        <div>
+                            <div class="text-sm font-black font-mono text-emerald-800 tracking-wide">+62 851-8795-3580</div>
+                            <div class="text-[11px] text-emerald-700 font-medium">Helpdesk Pemira Polbeng</div>
+                        </div>
+                        <a href="https://wa.me/6285187953580?text=Halo+Panitia+Helpdesk+Pemira+Polbeng%2C+saya+memerlukan+bantuan+teknis." 
+                           target="_blank" 
+                           class="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl shadow-sm text-xs transition">
+                            <span>Chat Langsung</span>
+                            <span class="font-mono text-xs">&nearr;</span>
+                        </a>
+                    </div>
+                    <p class="text-[11px] text-emerald-800 leading-relaxed">
+                        Isi formulir rincian kendala di bawah ini agar pesan otomatis tersusun rapi beserta NIM Anda, atau klik tombol <strong>Chat Langsung</strong> di atas.
+                    </p>
+                </div>
+
+                <form id="helpdeskWaForm" onsubmit="submitWaHelpdesk(event)" class="space-y-3.5 text-xs">
+                    <!-- Nama Mahasiswa -->
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1 text-[11px]">Nama Lengkap</label>
+                        <input type="text" 
+                               id="wa_sender_name" 
+                               value="" 
+                               required 
+                               placeholder="Nama Mahasiswa" 
+                               class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white text-xs">
+                    </div>
+
+                    <!-- NIM Mahasiswa -->
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1 text-[11px]">Nomor Induk Mahasiswa (NIM)</label>
+                        <input type="text" 
+                               id="wa_sender_nim" 
+                               value="" 
+                               required 
+                               placeholder="Contoh: 120140001" 
+                               class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white text-xs">
+                    </div>
+
+                    <!-- Kategori Masalah -->
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1 text-[11px]">Topik Kendala yang Dihadapi</label>
+                        <select id="wa_issue_topic" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white text-xs">
+                            <option value="NIM Tidak Terdaftar di Portal">NIM Tidak Terdaftar / Tidak Ditemukan di Portal</option>
+                            <option value="Kode OTP Email Tidak Masuk">Kode OTP Verifikasi Email Tidak Terkirim / Masuk</option>
+                            <option value="Lupa Kata Sandi / Akun Dikunci">Lupa Kata Sandi / Akun Pemilih Terkunci</option>
+                            <option value="NIM Sudah Terdaftar oleh Orang Lain">NIM Digunakan / Didaftarkan oleh Orang Lain</option>
+                            <option value="Kendala Teknis saat Mencoblos di Bilik Suara">Kendala Teknis saat Memilih di Bilik Suara</option>
+                            <option value="Pertanyaan Seputar Paslon & Jadwal">Pertanyaan Seputar Paslon &amp; Jadwal Pemira</option>
+                            <option value="Pertanyaan Lainnya">Pertanyaan Umum Lainnya</option>
+                        </select>
+                    </div>
+
+                    <!-- Detail Pesan -->
+                    <div>
+                        <label class="block font-bold uppercase tracking-wider text-slate-700 mb-1 text-[11px]">Rincian Kendala / Pesan Singkat</label>
+                        <textarea id="wa_issue_notes" 
+                                  rows="2" 
+                                  placeholder="Jelaskan secara singkat kendala yang Anda alami..." 
+                                  class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl font-medium focus:ring-2 focus:ring-emerald-500 focus:bg-white text-xs"></textarea>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold rounded-xl shadow-lg shadow-emerald-600/25 transition flex items-center justify-center space-x-2 text-xs">
+                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                        </svg>
+                        <span>Kirim Pesan ke WhatsApp Petugas &rarr;</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- 3. TAB FAQ & SOLUSI KENDALA CEPAT              -->
+            <!-- ============================================== -->
+            <div id="helpdesk-panel-faq" class="hidden space-y-3 text-xs">
+                
+                <div class="text-[11px] text-slate-500 mb-2">
+                    Klik pertanyaan di bawah untuk melihat solusi langkah-demi-langkah secara mandiri:
+                </div>
+
+                <!-- FAQ 1 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-1', 'faq-icon-1')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>1. NIM Saya Tidak Ditemukan / Tidak Terdaftar?</span>
+                        <span id="faq-icon-1" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-1" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px] space-y-1.5">
+                        <p>Pastikan Anda memasukkan NIM sesuai Kartu Tanda Mahasiswa (KTM) tanpa spasi atau tanda baca. Jika Anda berstatus mahasiswa aktif Polbeng namun belum terdaftar di DPT, silakan hubungi Helpdesk via WhatsApp dengan melampirkan foto KTM &amp; KRS semester aktif untuk saringan DPS manual oleh panitia KPU.</p>
+                        <a href="http://127.0.0.1:8000/nim-status" class="inline-block text-emerald-600 font-bold hover:underline">Periksa status NIM di sini &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-2', 'faq-icon-2')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>2. Kode OTP Email Tidak Muncul di Kotak Masuk?</span>
+                        <span id="faq-icon-2" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-2" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px] space-y-1">
+                        <p>1. Periksa folder <strong>Spam</strong>, <strong>Junk</strong>, atau tab <strong>Promotions</strong> di aplikasi Gmail / email Anda.</p>
+                        <p>2. Tunggu 60 detik sebelum menekan tombol "Kirim Ulang OTP" agar tidak terkena limitasi sistem.</p>
+                        <p>3. Pastikan penulisan alamat email aktif dan tidak ada kesalahan ketik (misal: <em>@gmail.com</em> bukan <em>@gmai.com</em>).</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-3', 'faq-icon-3')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>3. NIM Saya Sudah Didaftarkan oleh Orang Lain?</span>
+                        <span id="faq-icon-3" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-3" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px] space-y-1.5">
+                        <p>Jika NIM Anda disalahgunakan atau didaftarkan pihak lain tanpa izin, Anda berhak mengajukan <strong>Sengketa Hak Suara</strong>. Panitia Helpdesk akan memverifikasi KTM asli Anda dan mencabut akun palsu tersebut agar Anda dapat mendaftar ulang secara sah.</p>
+                        <a href="http://127.0.0.1:8000/nim-status/sengketa" class="inline-block text-rose-600 font-bold hover:underline">Buka Formulir Sengketa KTM Resmi &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-4', 'faq-icon-4')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>4. Apakah Pilihan Paslon Saya Bisa Terlihat oleh Panitia/Dosen?</span>
+                        <span id="faq-icon-4" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-4" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px]">
+                        <p><strong>100% RAHASIA (Asas LUBER JURDIL).</strong> Sistem E-Voting Kampus menggunakan arsitektur <em>Secret Ballot Engine</em> yang memisahkan identitas NIM pemilih dari kertas suara yang dicoblos menggunakan pengacakan token SHA-256. Tidak ada administrator, dosen, maupun panitia yang dapat mengetahui pilihan Anda.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ 5 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-5', 'faq-icon-5')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>5. Bagaimana Cara Memverifikasi Suara Saya Sudah Sah Masuk?</span>
+                        <span id="faq-icon-5" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-5" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px] space-y-1.5">
+                        <p>Setelah mencoblos di bilik suara, Anda akan menerima <strong>Kuitansi Suara Digital</strong> berisikan Kode Verifikasi / Hash Kriptografi. Salin kode tersebut dan buka menu <strong>Audit Kuitansi Suara</strong> untuk memastikan kuitansi Anda tercatat sah di kotak suara digital.</p>
+                        <a href="http://127.0.0.1:8000/verify-ballot" class="inline-block text-emerald-600 font-bold hover:underline">Buka Layar Audit Kuitansi Suara &rarr;</a>
+                    </div>
+                </div>
+
+                <!-- FAQ 6 -->
+                <div class="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                    <button type="button" 
+                            onclick="toggleFaqAccordion('faq-ans-6', 'faq-icon-6')" 
+                            class="w-full p-3.5 text-left font-bold text-slate-800 hover:text-emerald-700 flex items-center justify-between transition">
+                        <span>6. Koneksi Terputus saat Memilih di Bilik Suara?</span>
+                        <span id="faq-icon-6" class="text-slate-400 font-mono text-sm">&plus;</span>
+                    </button>
+                    <div id="faq-ans-6" class="hidden px-4 pb-3.5 text-slate-600 leading-relaxed border-t border-slate-200/60 pt-2 text-[11px]">
+                        <p>Jika internet Anda terputus sebelum Anda menekan tombol konfirmasi dan memasukkan PIN validasi, suara Anda <strong>belum terhitung</strong>. Cukup muat ulang (refresh) halaman bilik suara atau masuk kembali dari dashboard untuk mengulang pencoblosan.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ============================================== -->
+            <!-- 4. TAB SENGKETA HAK SUARA RESMI                -->
+            <!-- ============================================== -->
+            <div id="helpdesk-panel-sengketa" class="hidden space-y-4">
+                <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-2 text-xs">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-lg">⚖️</span>
+                        <h4 class="font-black text-amber-900">Layanan Sengketa Kepemilikan Akun</h4>
+                    </div>
+                    <p class="text-amber-800 leading-relaxed">
+                        Fasilitas resmi untuk mahasiswa yang mengalami pembajakan NIM, salah input data, atau penyalahgunaan akun oleh orang lain.
+                    </p>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-3">
+                    <h5 class="font-bold text-slate-800">Alur Penyelesaian Sengketa oleh Helpdesk:</h5>
+                    <div class="space-y-2 text-slate-600 text-[11px]">
+                        <div class="flex items-start space-x-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold flex-shrink-0 text-[10px]">1</span>
+                            <span>Pelapor mengisi formulir sengketa resmi dengan menyertakan kontak aktif.</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold flex-shrink-0 text-[10px]">2</span>
+                            <span>Petugas Helpdesk KPU-M memverifikasi identitas fisik / foto KTM asli pemilik sah.</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold flex-shrink-0 text-[10px]">3</span>
+                            <span>Setelah disetujui 2 petugas berwenang, akun palsu dicabut dan pemilik sah diberikan kode pemulihan.</span>
+                        </div>
+                    </div>
+
+                    <div class="pt-2">
+                        <a href="http://127.0.0.1:8000/nim-status/sengketa" 
+                           class="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 active:bg-black text-white font-bold rounded-xl shadow-md transition flex items-center justify-center space-x-2 text-xs">
+                            <span>Buka Formulir Laporan Sengketa Resmi</span>
+                            <span>&rarr;</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer Modal -->
+        <div class="px-6 py-3.5 bg-slate-50 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500 flex-shrink-0">
+            <span class="flex items-center space-x-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                <span>Pusat Bantuan Resmi KPU-M Polbeng</span>
+            </span>
+            <button type="button" onclick="closeHelpdeskModal()" class="font-bold text-slate-600 hover:text-slate-900 transition">
+                Tutup
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<!-- ======================================================== -->
+<!-- SCRIPT: HELPDESK CONTROLS & TAWK.TO FREE SCRIPT LOADER   -->
+<!-- ======================================================== -->
+<script>
+    // Tab Switcher pada Modal Helpdesk
+    function switchHelpdeskTab(tab) {
+        const tabs = ['chat', 'wa', 'faq', 'sengketa'];
+        tabs.forEach(t => {
+            const btn = document.getElementById('helpdesk-tab-btn-' + t);
+            const panel = document.getElementById('helpdesk-panel-' + t);
+
+            if (t === tab) {
+                if (btn) {
+                    btn.classList.add('text-slate-900', 'bg-white', 'shadow-sm', 'border', 'border-slate-200/60');
+                    btn.classList.remove('text-slate-600', 'hover:text-slate-900');
+                }
+                if (panel) panel.classList.remove('hidden');
+            } else {
+                if (btn) {
+                    btn.classList.remove('text-slate-900', 'bg-white', 'shadow-sm', 'border', 'border-slate-200/60');
+                    btn.classList.add('text-slate-600', 'hover:text-slate-900');
+                }
+                if (panel) panel.classList.add('hidden');
+            }
+        });
+    }
+
+    // Buka Modal Helpdesk
+    function openHelpdeskModal(defaultTab = 'chat') {
+        const modal = document.getElementById('voterHelpdeskModal');
+        if (modal) {
+            modal.classList.remove('hidden');
+            switchHelpdeskTab(defaultTab);
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    // Tutup Modal Helpdesk
+    function closeHelpdeskModal() {
+        const modal = document.getElementById('voterHelpdeskModal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Toggle FAQ Accordion Item
+    function toggleFaqAccordion(ansId, iconId) {
+        const ans = document.getElementById(ansId);
+        const icon = document.getElementById(iconId);
+        if (!ans) return;
+
+        if (ans.classList.contains('hidden')) {
+            ans.classList.remove('hidden');
+            if (icon) icon.innerHTML = '&minus;';
+        } else {
+            ans.classList.add('hidden');
+            if (icon) icon.innerHTML = '&plus;';
+        }
+    }
+
+    // Kirim Pesan ke WhatsApp Panitia
+    function submitWaHelpdesk(e) {
+        e.preventDefault();
+        const name = document.getElementById('wa_sender_name').value.trim();
+        const nim = document.getElementById('wa_sender_nim').value.trim();
+        const topic = document.getElementById('wa_issue_topic').value;
+        const notes = document.getElementById('wa_issue_notes').value.trim();
+        const waNumber = '6285187953580';
+
+        let message = `Halo Panitia Pemira Polbeng, saya memerlukan bantuan teknis:\n\n`;
+        message += `👤 Nama: ${name}\n`;
+        message += `🆔 NIM: ${nim}\n`;
+        message += `📌 Topik Kendala: ${topic}\n`;
+        if (notes) {
+            message += `📝 Keterangan: ${notes}\n`;
+        }
+        message += `\nMohon bantuannya, terima kasih.`;
+
+        const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`;
+        window.open(waUrl, '_blank');
+    }
+
+    // Handler untuk membuka obrolan langsung Tawk.to
+    function startTawkChat() {
+        if (typeof Tawk_API !== 'undefined' && typeof Tawk_API.maximize === 'function') {
+            closeHelpdeskModal();
+            Tawk_API.maximize();
+        } else {
+            switchHelpdeskTab('wa');
+        }
+    }
+
+    // Tutup modal jika user menekan tombol Escape atau klik area di luar modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeHelpdeskModal();
+        }
+    });
+
+    document.getElementById('voterHelpdeskModal')?.addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeHelpdeskModal();
+        }
+    });
+
+    // Otomatis buka jika ada hash #helpdesk atau parameter ?helpdesk=open di URL
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (window.location.hash === '#helpdesk' || urlParams.get('helpdesk') === 'open') {
+            openHelpdeskModal('chat');
+        }
+    });
+</script>
+
+    
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const hamburgerIcon = document.getElementById('hamburgerIcon');
+            const closeIcon = document.getElementById('closeMenuIcon');
+            
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                hamburgerIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+                hamburgerIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        }
+    </script>
+
+    <script>
+    function switchTab(tab) {
+        const loginBtn = document.getElementById('tab-btn-login');
+        const registerBtn = document.getElementById('tab-btn-register');
+        const loginPanel = document.getElementById('panel-login');
+        const registerPanel = document.getElementById('panel-register');
+
+        if (tab === 'register') {
+            loginBtn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-slate-200/60');
+            loginBtn.classList.add('text-slate-500', 'hover:text-slate-800');
+
+            registerBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-slate-200/60');
+            registerBtn.classList.remove('text-slate-500', 'hover:text-slate-800');
+
+            loginPanel.classList.add('hidden');
+            registerPanel.classList.remove('hidden');
+
+            const regNimInput = document.getElementById('reg_nim');
+            if (regNimInput && !regNimInput.value) {
+                regNimInput.focus();
+            }
+
+            if (history.replaceState) {
+                history.replaceState(null, null, '#register');
+            }
+        } else {
+            registerBtn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-slate-200/60');
+            registerBtn.classList.add('text-slate-500', 'hover:text-slate-800');
+
+            loginBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm', 'border', 'border-slate-200/60');
+            loginBtn.classList.remove('text-slate-500', 'hover:text-slate-800');
+
+            registerPanel.classList.add('hidden');
+            loginPanel.classList.remove('hidden');
+
+            const loginNimInput = document.getElementById('login_nim');
+            if (loginNimInput && !loginNimInput.value) {
+                loginNimInput.focus();
+            }
+
+            if (history.replaceState) {
+                history.replaceState(null, null, '#login');
+            }
+        }
+    }
+
+    function toggleInputVisibility(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (!input) return;
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            if (icon) {
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"/>`;
+            }
+        } else {
+            input.type = 'password';
+            if (icon) {
+                icon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>`;
+            }
+        }
+    }
+
+    function fillTestAccount(nim, pin) {
+        switchTab('login');
+        const nimInput = document.getElementById('login_nim');
+        const pinInput = document.getElementById('login_pin');
+        if (nimInput && pinInput) {
+            nimInput.value = nim;
+            pinInput.value = pin;
+            nimInput.classList.add('ring-2', 'ring-emerald-500');
+            pinInput.classList.add('ring-2', 'ring-emerald-500');
+            setTimeout(() => {
+                nimInput.classList.remove('ring-2', 'ring-emerald-500');
+                pinInput.classList.remove('ring-2', 'ring-emerald-500');
+            }, 1000);
+        }
+    }
+
+    function fillTestRegistration(nim, dob, email) {
+        switchTab('register');
+        const nimInput = document.getElementById('reg_nim');
+        const dobInput = document.getElementById('reg_dob');
+        const emailInput = document.getElementById('reg_email');
+        const passInput = document.getElementById('reg_password');
+        const confirmPassInput = document.getElementById('reg_password_confirmation');
+
+        if (nimInput) nimInput.value = nim;
+        if (dobInput) dobInput.value = dob;
+        if (emailInput && email) emailInput.value = email;
+        if (passInput) passInput.value = 'Polbeng2026!';
+        if (confirmPassInput) confirmPassInput.value = 'Polbeng2026!';
+
+        [nimInput, dobInput, passInput, confirmPassInput].forEach(el => {
+            if (el) {
+                el.classList.add('ring-2', 'ring-indigo-500');
+                setTimeout(() => el.classList.remove('ring-2', 'ring-indigo-500'), 1000);
+            }
+        });
+
+        if (emailInput) {
+            emailInput.focus();
+            emailInput.classList.add('ring-2', 'ring-indigo-500');
+            setTimeout(() => emailInput.classList.remove('ring-2', 'ring-indigo-500'), 1000);
+        }
+    }
+
+    // Hash & URL query detection on load
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+
+        if (hash === '#register' || tabParam === 'register' || false) {
+            switchTab('register');
+        } else {
+            switchTab('login');
+        }
+    });
+
+    // Anti Double-Submit Guard: Login
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', function() {
+            const btn = document.getElementById('loginSubmitBtn');
+            const btnText = document.getElementById('loginBtnText');
+            const spinner = document.getElementById('loginBtnSpinner');
+
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+            if (btnText) btnText.innerText = 'Mengautentikasi...';
+            if (spinner) spinner.classList.remove('hidden');
+        });
+    }
+
+    // Anti Double-Submit Guard: Register
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', function() {
+            const btn = document.getElementById('regSubmitBtn');
+            const btnText = document.getElementById('regBtnText');
+            const spinner = document.getElementById('regBtnSpinner');
+
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+            }
+            if (btnText) btnText.innerText = 'Memverifikasi data & mengirim OTP...';
+            if (spinner) spinner.classList.remove('hidden');
+        });
+    }
+</script>
+</body>
+</html>

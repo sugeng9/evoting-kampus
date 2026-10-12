@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Grafik Quick Count Real-Time - KPU Polbeng')
+@section('title', 'Grafik Quick Count Real-Time - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-8 w-full">

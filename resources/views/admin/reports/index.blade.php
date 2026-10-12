@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan & Berita Acara Hasil Tetap Ormawa - KPU Polbeng')
+@section('title', 'Laporan & Berita Acara Hasil Tetap Ormawa - KPR Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-8 w-full">
@@ -16,7 +16,7 @@
                     <svg class="w-4 h-4 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <span>Penetapan Pemenang Resmi Sidang Pleno KPU-M</span>
+                    <span>Penetapan Pemenang Resmi Sidang Pleno KPR (Komisi Pemilihan Raya) &amp; PanWas</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Laporan &amp; Berita Acara Hasil Tetap Pemira</h1>
                 <p class="text-xs text-slate-300 mt-1 max-w-2xl leading-relaxed">

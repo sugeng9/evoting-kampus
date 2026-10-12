@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Seluruh Log Audit Keamanan - KPU Kampus')
+@section('title', 'Seluruh Log Audit Keamanan - KPR &amp; PanWas Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="space-y-6 w-full">
@@ -31,33 +31,45 @@
                     <tr>
                         <th class="py-3 px-6">ID</th>
                         <th class="py-3 px-6">Waktu Transaksi (WIB)</th>
-                        <th class="py-3 px-6">Peristiwa (Event)</th>
-                        <th class="py-3 px-6">Aktor &amp; ID</th>
+                        <th class="py-3 px-6">Aksi &amp; Peristiwa</th>
+                        <th class="py-3 px-6">Aktor</th>
+                        <th class="py-3 px-6">Target</th>
                         <th class="py-3 px-6">Alamat IP</th>
-                        <th class="py-3 px-6">User Agent</th>
-                        <th class="py-3 px-6">Payload / Parameter</th>
+                        <th class="py-3 px-6">Integritas Rantai Hash (SHA-256)</th>
+                        <th class="py-3 px-6">Payload</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 font-mono">
                     @forelse($logs as $log)
                         <tr class="hover:bg-slate-50/70 transition">
                             <td class="py-3.5 px-6 text-slate-400">#{{ $log->id }}</td>
-                            <td class="py-3.5 px-6 text-slate-600 whitespace-nowrap">{{ $log->created_at->timezone('Asia/Jakarta')->translatedFormat('d/m/Y H:i:s') }} WIB</td>
+                            <td class="py-3.5 px-6 text-slate-600 whitespace-nowrap">{{ $log->created_at->timezone('Asia/Jakarta')->translatedFormat('d/m/Y H:i:s') }}</td>
                             <td class="py-3.5 px-6">
-                                <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ str_contains($log->event_type, 'SUCCESS') ? 'bg-emerald-100 text-emerald-800' : (str_contains($log->event_type, 'FAIL') || str_contains($log->event_type, 'BLOCKED') ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-800') }}">
-                                    {{ $log->event_type }}
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold {{ str_contains($log->aksi ?? $log->event_type, 'SUCCESS') ? 'bg-emerald-100 text-emerald-800' : (str_contains($log->aksi ?? $log->event_type, 'FAIL') || str_contains($log->aksi ?? $log->event_type, 'BLOCKED') ? 'bg-rose-100 text-rose-800' : 'bg-slate-100 text-slate-800') }}">
+                                    {{ $log->aksi ?? $log->event_type }}
                                 </span>
                             </td>
-                            <td class="py-3.5 px-6 text-slate-700 capitalize font-sans">{{ $log->actor_type }} #{{ $log->actor_id ?: '-' }}</td>
-                            <td class="py-3.5 px-6 text-slate-500">{{ $log->ip_address }}</td>
-                            <td class="py-3.5 px-6 text-slate-400 truncate max-w-[200px]" title="{{ $log->user_agent }}">{{ $log->user_agent }}</td>
-                            <td class="py-3.5 px-6 text-slate-600 truncate max-w-xs" title="{{ json_encode($log->payload) }}">
+                            <td class="py-3.5 px-6 text-slate-700 font-sans text-xs font-medium">{{ $log->aktor ?: ($log->actor_type . ' #' . ($log->actor_id ?: '-')) }}</td>
+                            <td class="py-3.5 px-6 text-slate-600 font-sans text-xs">{{ $log->target ?: '-' }}</td>
+                            <td class="py-3.5 px-6 text-slate-500 text-[11px]">{{ $log->ip_address }}</td>
+                            <td class="py-3.5 px-6 text-[10px]">
+                                @if($log->hash_ini)
+                                    <div class="flex items-center space-x-1.5" title="Hash Ini: {{ $log->hash_ini }}&#10;Hash Sebelumnya: {{ $log->hash_sebelumnya }}">
+                                        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+                                        <span class="text-slate-700 font-bold">{{ substr($log->hash_ini, 0, 10) }}...</span>
+                                        <span class="text-slate-400 text-[9px]">(Prev: {{ substr($log->hash_sebelumnya, 0, 6) }}...)</span>
+                                    </div>
+                                @else
+                                    <span class="text-slate-400">-</span>
+                                @endif
+                            </td>
+                            <td class="py-3.5 px-6 text-slate-600 truncate max-w-xs text-[11px]" title="{{ json_encode($log->payload) }}">
                                 {{ json_encode($log->payload) }}
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="py-8 text-center text-slate-400">Belum ada catatan log aktivitas.</td>
+                            <td colspan="8" class="py-8 text-center text-slate-400 font-sans">Belum ada catatan log aktivitas.</td>
                         </tr>
                     @endforelse
                 </tbody>

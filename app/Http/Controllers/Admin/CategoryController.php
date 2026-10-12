@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use App\Models\AuditLog;
 use App\Models\Candidate;
 use App\Models\ElectionCategory;
@@ -84,24 +86,9 @@ class CategoryController extends Controller
     /**
      * Simpan kategori ormawa baru ke database
      */
-    public function store(Request $request)
+    public function store(StoreCategoryRequest $request)
     {
-        $validated = $request->validate([
-            'code' => ['required', 'string', 'max:50', 'alpha_dash', 'unique:election_categories,code'],
-            'name' => ['required', 'string', 'max:150'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'faculty_filter' => ['nullable', 'string', 'max:100'],
-            'study_program_filter' => ['nullable', 'string', 'max:100'],
-            'start_at' => ['nullable', 'date'],
-            'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
-            'status_override' => ['required', 'in:AUTO,FORCE_OPEN,FORCE_CLOSED'],
-            'display_order' => ['required', 'integer', 'min:1'],
-            'is_active' => ['nullable', 'boolean'],
-        ], [
-            'code.unique' => 'Kode kategori ini sudah digunakan oleh organisasi lain.',
-            'code.alpha_dash' => 'Kode kategori hanya boleh berisi huruf, angka, tanda hubung (-), dan garis bawah (_).',
-            'end_at.after_or_equal' => 'Waktu selesai harus sama atau setelah waktu mulai.',
-        ]);
+        $validated = $request->validated();
 
         $category = ElectionCategory::create([
             'code' => strtoupper($validated['code']),
@@ -145,25 +132,11 @@ class CategoryController extends Controller
     /**
      * Perbarui data kategori organisasi
      */
-    public function update(Request $request, int $id)
+    public function update(UpdateCategoryRequest $request, int $id)
     {
         $category = ElectionCategory::findOrFail($id);
 
-        $validated = $request->validate([
-            'code' => ['required', 'string', 'max:50', 'alpha_dash', Rule::unique('election_categories', 'code')->ignore($category->id)],
-            'name' => ['required', 'string', 'max:150'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'faculty_filter' => ['nullable', 'string', 'max:100'],
-            'study_program_filter' => ['nullable', 'string', 'max:100'],
-            'start_at' => ['nullable', 'date'],
-            'end_at' => ['nullable', 'date', 'after_or_equal:start_at'],
-            'status_override' => ['required', 'in:AUTO,FORCE_OPEN,FORCE_CLOSED'],
-            'display_order' => ['required', 'integer', 'min:1'],
-            'is_active' => ['nullable', 'boolean'],
-        ], [
-            'code.unique' => 'Kode kategori ini sudah digunakan oleh organisasi lain.',
-            'end_at.after_or_equal' => 'Waktu selesai harus sama atau setelah waktu mulai.',
-        ]);
+        $validated = $request->validated();
 
         $category->update([
             'code' => strtoupper($validated['code']),

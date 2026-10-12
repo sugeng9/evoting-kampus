@@ -142,6 +142,86 @@ class ElectionCategory extends Model
         return null;
     }
 
+    /**
+     * Memeriksa apakah kategori berstatus Aklamasi (Tepat 1 Calon Tunggal - Opsi B)
+     */
+    public function isAklamasi(): bool
+    {
+        return $this->candidates()->count() === 1;
+    }
+
+    /**
+     * Memeriksa apakah kategori berstatus Nihil (0 Calon terdaftar / ditunda)
+     */
+    public function isNihil(): bool
+    {
+        return $this->candidates()->count() === 0;
+    }
+
+    /**
+     * Memeriksa apakah kategori memerlukan pemungutan suara di bilik suara digital
+     * Sesuai OPSI B: Hanya dibuka bilik suara jika terdapat minimal 2 pasangan calon (kompetisi)
+     */
+    public function isVotingRequired(): bool
+    {
+        return $this->is_active && $this->candidates()->count() >= 2;
+    }
+
+    /**
+     * Mendapatkan calon tunggal yang ditetapkan secara aklamasi
+     */
+    public function getAklamasiCandidate(): ?Candidate
+    {
+        return $this->candidates()->first();
+    }
+
+    /**
+     * Mendapatkan klasifikasi status kompetisi paslon
+     */
+    public function getCompetitionStatus(): string
+    {
+        $count = $this->candidates()->count();
+        if ($count >= 2) {
+            return 'COMPETITIVE';
+        } elseif ($count === 1) {
+            return 'AKLAMASI';
+        }
+        return 'NIHIL';
+    }
+
+    /**
+     * Mendapatkan metadata lencana status kompetisi / aklamasi
+     */
+    public function getCompetitionBadge(): array
+    {
+        return match ($this->getCompetitionStatus()) {
+            'COMPETITIVE' => [
+                'status' => 'COMPETITIVE',
+                'label' => 'Pemungutan Suara Aktif',
+                'short_label' => 'Kompetisi',
+                'badge_color' => 'bg-emerald-100 text-emerald-800 border-emerald-300',
+                'dot_color' => 'bg-emerald-500',
+                'description' => 'Terdapat 2 atau lebih calon. Bilik suara digital dibuka.',
+            ],
+            'AKLAMASI' => [
+                'status' => 'AKLAMASI',
+                'label' => 'Ditetapkan Aklamasi (Calon Tunggal)',
+                'short_label' => 'Aklamasi',
+                'badge_color' => 'bg-amber-100 text-amber-900 border-amber-300',
+                'dot_color' => 'bg-amber-500',
+                'description' => 'Hanya 1 calon tunggal. Ditetapkan sah tanpa pemungutan suara.',
+            ],
+            'NIHIL' => [
+                'status' => 'NIHIL',
+                'label' => 'Nihil / Ditunda (0 Paslon)',
+                'short_label' => 'Nihil',
+                'badge_color' => 'bg-slate-200 text-slate-700 border-slate-300',
+                'dot_color' => 'bg-slate-400',
+                'description' => 'Belum ada calon terdaftar. Pemilihan ditiadakan.',
+            ],
+        };
+    }
+
     public function candidates(): HasMany
     {
         return $this->hasMany(Candidate::class)->where('is_active', true)->orderBy('candidate_number', 'asc');

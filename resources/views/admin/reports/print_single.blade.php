@@ -99,10 +99,10 @@
             <div class="text-center flex-1">
                 <h3 class="text-xs uppercase tracking-widest font-bold">Kementerian Pendidikan Tinggi, Sains, dan Teknologi</h3>
                 <h2 class="text-base font-extrabold uppercase tracking-wide mt-0.5">Politeknik Negeri Bengkalis</h2>
-                <h1 class="text-lg font-black uppercase tracking-wider mt-0.5">Komisi Pemilihan Umum Mahasiswa (KPU-M)</h1>
+                <h1 class="text-lg font-black uppercase tracking-wider mt-0.5">Komisi Pemilihan Raya (KPR)</h1>
                 <p class="text-[10px] mt-1 text-slate-700">
                     Jalan Bathin Alam, Sungai Alam, Bengkalis, Riau 28711<br>
-                    Laman Resmi: <em>www.polbeng.ac.id</em> &bull; Pos-el: <em>kpu@polbeng.ac.id</em>
+                    Laman Resmi: <em>www.polbeng.ac.id</em> &bull; Pos-el: <em>kpr@polbeng.ac.id</em>
                 </p>
             </div>
 
@@ -145,7 +145,7 @@
 
         <!-- PARAGRAF PEMBUKA SIDANG PLENO -->
         <div class="text-xs text-justify leading-relaxed mb-5 indent-8">
-            Pada hari ini, <strong>{{ $report['generated_at'] }}</strong>, bertempat di Sekretariat Komisi Pemilihan Umum Mahasiswa Politeknik Negeri Bengkalis, telah diselenggarakan <strong>Rapat Pleno Terbuka Rekapitulasi {{ $report['is_ended'] ? 'dan Penetapan Hasil Tetap' : 'Perolehan Suara Sementara' }}</strong> secara digital melalui Sistem E-Voting Berbasis Enkripsi Kriptografis (Secret Ballot Engine) untuk kategori pemilihan:
+            Pada hari ini, <strong>{{ $report['generated_at'] }}</strong>, bertempat di Sekretariat Komisi Pemilihan Raya (KPR) &amp; PanWas (Panitia Pengawas) Politeknik Negeri Bengkalis, telah diselenggarakan <strong>Rapat Pleno Terbuka Rekapitulasi {{ $report['is_ended'] ? 'dan Penetapan Hasil Tetap' : 'Perolehan Suara Sementara' }}</strong> secara digital melalui Sistem E-Voting Berbasis Enkripsi Kriptografis (Secret Ballot Engine) untuk kategori pemilihan:
         </div>
 
         <!-- DETAIL KATEGORI -->
@@ -263,7 +263,11 @@
                             </td>
                             <td class="border border-slate-400 px-3 py-2 text-center text-xs">
                                 @if($isTop)
-                                    @if($report['is_ended'])
+                                    @if(!empty($report['is_aklamasi']))
+                                        <span class="inline-block px-2 py-0.5 rounded font-black text-amber-900 border border-amber-600 bg-amber-100">
+                                            ★ TERPILIH (AKLAMASI)
+                                        </span>
+                                    @elseif($report['is_ended'])
                                         <span class="inline-block px-2 py-0.5 rounded font-black text-emerald-900 border border-emerald-600 bg-emerald-100">
                                             ★ TERPILIH (HASIL TETAP)
                                         </span>
@@ -294,7 +298,11 @@
                 @endif
             </h4>
             
-            @if($report['is_ended'])
+            @if(!empty($report['is_aklamasi']))
+                <div class="text-xs text-justify leading-relaxed">
+                    Berdasarkan Berkas Pendaftaran &amp; Hasil Verifikasi Faktual Komisi Pemilihan Umum Mahasiswa yang telah disahkan dalam Sidang Pleno, karena hanya terdapat <strong>1 Pasangan Calon Tunggal</strong> yang memenuhi syarat administratif, maka berdasarkan Peraturan Tata Tertib Pemira Polbeng (Opsi Penetapan Aklamasi), Komisi Pemilihan Umum Mahasiswa Politeknik Negeri Bengkalis secara sah dan mengikat:
+                </div>
+            @elseif($report['is_ended'])
                 <div class="text-xs text-justify leading-relaxed">
                     Berdasarkan hasil penghitungan suara yang telah berakhir sesuai batas waktu resmi dan memenuhi kuorum sidang pleno, Komisi Pemilihan Umum Mahasiswa Politeknik Negeri Bengkalis secara sah dan mengikat:
                 </div>
@@ -378,15 +386,15 @@
                 </div>
             </div>
 
-            <!-- Tanda Tangan Panitia KPU & Pimpinan Kampus -->
+            <!-- Tanda Tangan Panitia KPR, PanWas & Pimpinan Kampus -->
             <div class="border-t border-slate-300 pt-6">
                 <div class="text-center font-bold uppercase tracking-wider text-[11px] mb-4">
-                    KOMISI PEMILIHAN UMUM MAHASISWA POLITEKNIK NEGERI BENGKALIS
+                    KOMISI PEMILIHAN RAYA (KPR) &amp; PANWAS POLITEKNIK NEGERI BENGKALIS
                 </div>
                 
                 <div class="grid grid-cols-2 gap-8 text-center mb-6">
                     <div>
-                        <span class="block font-bold">Ketua KPU Mahasiswa</span>
+                        <span class="block font-bold">Ketua KPR (Komisi Pemilihan Raya)</span>
                         <div class="h-16 flex items-end justify-center">
                             <span class="text-[10px] text-slate-400 italic">[ Cap Stempel &amp; Tanda Tangan ]</span>
                         </div>
@@ -396,7 +404,7 @@
                     </div>
 
                     <div>
-                        <span class="block font-bold">Sekretaris KPU Mahasiswa</span>
+                        <span class="block font-bold">Ketua PanWas (Panitia Pengawas)</span>
                         <div class="h-16 flex items-end justify-center">
                             <span class="text-[10px] text-slate-400 italic">[ Tanda Tangan ]</span>
                         </div>

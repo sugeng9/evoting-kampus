@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImportMasterCsvRequest;
+use App\Http\Requests\UbahFaseRequest;
 use App\Models\PemilihMaster;
 use App\Models\SystemPhase;
 use App\Models\Voter;
@@ -42,14 +44,8 @@ class FaseAdminController extends Controller
     }
 
     /** Ubah fase sistem. */
-    public function ubahFase(Request $request)
+    public function ubahFase(UbahFaseRequest $request)
     {
-        $request->validate([
-            'fase'                => ['required', 'in:pendaftaran,sengketa,aktif,voting'],
-            'pendaftaran_terbuka' => ['boolean'],
-            'catatan'             => ['nullable', 'string', 'max:500'],
-        ]);
-
         $phase   = SystemPhase::current();
         $faseLama = $phase->fase;
         $faseBaru = $request->fase;
@@ -99,12 +95,8 @@ class FaseAdminController extends Controller
      * Import data master pemilih dari CSV.
      * Format CSV: nim,nama,prodi,tanggal_lahir (YYYY-MM-DD)
      */
-    public function importMasterCsv(Request $request)
+    public function importMasterCsv(ImportMasterCsvRequest $request)
     {
-        $request->validate([
-            'csv_file' => ['required', 'file', 'mimes:csv,txt', 'max:5120'],
-        ]);
-
         $file = $request->file('csv_file');
         $path = $file->getRealPath();
         $rows = array_map('str_getcsv', file($path));

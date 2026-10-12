@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login Panitia KPR Polbeng')
+@section('title', 'Login Panitia KPR & PanWas - Politeknik Negeri Bengkalis')
 
 @section('content')
 <div class="max-w-md mx-auto my-6 sm:my-12">
@@ -16,10 +16,10 @@
             </div>
 
             <div class="inline-block px-3 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-extrabold uppercase tracking-widest border border-amber-500/30 mt-3 mb-1">
-                Otoritas Panitia &bull; KPR Polbeng
+                Otoritas Panitia &bull; KPR &amp; PanWas
             </div>
-            <h2 class="text-2xl font-heading font-black tracking-tight text-white">Portal Panel Pengawas</h2>
-            <p class="text-xs text-slate-300 font-sans mt-1">Pusat Kendali Pemira &bull; Workstation Administrator</p>
+            <h2 class="text-2xl font-heading font-black tracking-tight text-white">Portal Panel PanWas &amp; KPR</h2>
+            <p class="text-xs text-slate-300 font-sans mt-1">Pusat Kendali Pemira &bull; Politeknik Negeri Bengkalis</p>
         </div>
 
         <!-- Form Body -->
@@ -45,7 +45,7 @@
                                required 
                                autocomplete="username"
                                autofocus
-                               placeholder="Contoh: admin_kpu" 
+                               placeholder="Contoh: admin_kpr" 
                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border @error('username') border-rose-500 @else border-slate-300 @enderror rounded-xl text-slate-900 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition text-sm">
                     </div>
                     @error('username')
@@ -93,6 +93,16 @@
                     </label>
                     <span class="text-slate-400 text-[11px]">Audit IP Otomatis</span>
                 </div>
+
+                @if(config('services.turnstile.enabled'))
+                    <!-- Cloudflare Turnstile Anti-Bot Protection -->
+                    <div class="flex flex-col items-center justify-center my-2">
+                        <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key') }}" data-theme="light"></div>
+                        @error('cf-turnstile-response')
+                            <p class="mt-1.5 text-xs text-rose-600 font-semibold text-center">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endif
 
                 <!-- Submit Button -->
                 <button type="submit" 

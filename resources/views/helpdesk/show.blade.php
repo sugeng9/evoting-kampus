@@ -54,6 +54,27 @@
                                 <dt class="text-sm font-medium text-gray-500">Alasan</dt>
                                 <dd class="mt-1 text-sm text-gray-900 bg-gray-50 p-3 rounded border border-gray-100">{{ $sengketa->alasan ?? '' }}</dd>
                             </div>
+                            <div class="sm:col-span-2">
+                                <dt class="text-sm font-medium text-gray-500">Bukti Lampiran KTM</dt>
+                                <dd class="mt-1">
+                                    @if(isset($sengketa) && $sengketa->hasBuktiKtm())
+                                        <div class="flex items-center space-x-3 p-3 bg-indigo-50 border border-indigo-200 rounded-lg">
+                                            <svg class="w-6 h-6 text-indigo-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium text-gray-900 truncate">Lampiran Dokumen Identitas Mahasiswa</p>
+                                                <p class="text-xs text-indigo-700">Tersimpan aman di private storage (akses dibatasi petugas berwenang).</p>
+                                            </div>
+                                            <a href="{{ route('helpdesk.sengketa.ktm', $sengketa->id) }}" target="_blank" class="inline-flex items-center px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold rounded-md shadow-sm">
+                                                Lihat Bukti KTM &rarr;
+                                            </a>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-500 italic">Tidak ada lampiran berkas KTM yang diunggah pelapor.</span>
+                                    @endif
+                                </dd>
+                            </div>
                         </dl>
                     </div>
                 </div>

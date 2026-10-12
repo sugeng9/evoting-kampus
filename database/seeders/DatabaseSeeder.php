@@ -237,5 +237,8 @@ class DatabaseSeeder extends Seeder
 
         // 5. Inisialisasi Autentikasi Pemilih (Staff Helpdesk, Akun Admin, & Fase Awal)
         $this->call(PemilihMasterSeeder::class);
+
+        // 6. Muat Akun Delegasi Siap Login per Jurusan untuk Sosialisasi Mahasiswa
+        $this->call(DelegasiSosialisasiSeeder::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\VerifyBallotRequest;
 use App\Models\BallotBox;
 use Illuminate\Http\Request;
 
@@ -18,12 +19,8 @@ class PublicAuditController extends Controller
     /**
      * Cek keberadaan suara di Kotak Suara Digital tanpa membocorkan isi pilihan
      */
-    public function verifyBallot(Request $request)
+    public function verifyBallot(VerifyBallotRequest $request)
     {
-        $request->validate([
-            'verification_code' => ['required', 'string', 'max:50'],
-        ]);
-
         $code = trim($request->input('verification_code'));
 
         $ballot = BallotBox::with('category')

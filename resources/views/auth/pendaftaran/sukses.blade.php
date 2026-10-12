@@ -3,39 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Berhasil - PEMIRA POLBENG</title>
+    <title>Pendaftaran Berhasil - PEMIRA POLITEKNIK NEGERI BENGKALIS</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
-    <div class="max-w-md w-full bg-white rounded-lg shadow-md p-8 text-center">
-        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-            <svg class="h-10 w-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 antialiased text-slate-800">
+    <div class="max-w-md w-full bg-white rounded-2xl shadow-sm border border-slate-200/90 p-6 sm:p-8 text-center">
+        <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-2xl bg-emerald-50 text-emerald-700 mb-5 border border-emerald-200">
+            <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
         </div>
         
-        <h1 class="text-2xl font-bold text-gray-900 mb-2">Pendaftaran Berhasil!</h1>
-        <p class="text-lg font-bold text-emerald-600 mb-4">Akun Anda Telah Aktif &amp; Terverifikasi 🎉</p>
+        <h1 class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Pendaftaran Akun Berhasil</h1>
+        <p class="text-xs font-semibold text-emerald-700 mt-1">Akun Pemilih Anda Telah Aktif &amp; Terverifikasi</p>
         
-        <div class="bg-emerald-50 p-4 rounded-xl text-sm text-emerald-900 text-left mb-6 border border-emerald-200">
-            <p class="font-semibold mb-1">Otentikasi Berhasil</p>
-            <p class="text-xs text-emerald-800 leading-relaxed mb-2">
-                NIM Anda telah berhasil divalidasi dan kepemilikannya terkonfirmasi melalui OTP email. Akun Anda langsung aktif tanpa perlu menunggu persetujuan manual panitia.
+        <div class="bg-slate-50 p-4 rounded-xl text-xs text-slate-600 text-left my-5 border border-slate-200 space-y-1.5">
+            <p class="font-bold text-slate-900 text-xs uppercase tracking-wider">Otentikasi Identitas Berhasil</p>
+            <p class="leading-relaxed">
+                NIM Anda telah berhasil divalidasi silang terhadap data resmi BAAK dan kepemilikannya terkonfirmasi melalui OTP.
             </p>
-            <p class="text-xs text-emerald-700">
-                Silakan login sekarang menggunakan NIM dan Password pribadi yang baru saja Anda buat.
+            <p class="text-slate-500 text-[11px]">
+                Silakan masuk menggunakan NIM dan Kata Sandi yang baru saja Anda buat.
             </p>
         </div>
         
-        <div class="space-y-3">
-            <a href="{{ route('voter.login') }}" class="w-full flex justify-center py-3 px-4 rounded-xl shadow-md text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition">
-                🔑 Masuk ke Akun Pemilih Sekarang &rarr;
+        <div class="space-y-2.5">
+            <a href="{{ route('voter.login') }}" class="w-full flex justify-center py-3 px-4 rounded-xl shadow-sm text-xs font-semibold text-white bg-slate-900 hover:bg-slate-800 active:bg-black focus:outline-none transition">
+                Masuk ke Bilik Suara Sekarang &rarr;
             </a>
-            <a href="{{ route('nim.status.form') }}" class="w-full flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition">
-                🔍 Cek Status Kepemilikan NIM
-            </a>
-            <a href="{{ url('/') }}" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold block pt-1">
-                Kembali ke Beranda
+            <a href="{{ route('nim.status.form') }}" class="w-full flex justify-center py-2.5 px-4 border border-slate-300 rounded-xl text-xs font-medium text-slate-700 bg-white hover:bg-slate-50 transition">
+                Cek Status Kepemilikan NIM
             </a>
         </div>
     </div>

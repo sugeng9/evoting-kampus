@@ -36,15 +36,19 @@ class AuditLogger
                 $payload['aktor'] = (string) $aktor;
             }
 
-            AuditLog::create([
-                'event_type' => $aksi,
-                'actor_type' => $aktorTipe ?: 'system',
-                'actor_id'   => $actorId,
-                'ip_address' => request()->ip(),
-                'user_agent' => substr(request()->userAgent() ?? '', 0, 500),
-                'payload'    => $payload,
-                'created_at' => now(),
-            ]);
+            $target = null;
+            if (isset($payload['target'])) {
+                $target = (string) $payload['target'];
+            } elseif (isset($payload['nim'])) {
+                $target = "voter:{$payload['nim']}";
+            }
+
+            AuditLog::record(
+                aksi: $aksi,
+                target: $target,
+                payload: $payload,
+                aktor: $aktor ? (string)$aktor : null
+            );
         } catch (\Throwable $e) {
             // Fail gracefully agar pencatatan log tidak menghentikan alur aplikasi pengguna
             Log::warning("Gagal menulis audit log ({$aksi}): " . $e->getMessage());

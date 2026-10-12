@@ -18,12 +18,14 @@ class Sengketa extends Model
         'disetujui_oleh',
         'catatan_petugas',
         'ktm_diverifikasi',
+        'bukti_ktm_path',
         'diselesaikan_at',
     ];
 
     protected $casts = [
         'diselesaikan_at' => 'datetime',
         'ktm_diverifikasi' => 'boolean',
+        'pelapor_kontak' => 'encrypted',
     ];
 
     public function petugas_a(): BelongsTo
@@ -57,5 +59,19 @@ class Sengketa extends Model
         return $this->ditangani_oleh !== null && 
                $this->disetujui_oleh === null && 
                $userId !== $this->ditangani_oleh;
+    }
+
+    public function hasBuktiKtm(): bool
+    {
+        return !empty($this->bukti_ktm_path) && \Illuminate\Support\Facades\Storage::disk('local')->exists($this->bukti_ktm_path);
+    }
+
+    public function deleteBuktiKtmFile(): void
+    {
+        if (!empty($this->bukti_ktm_path)) {
+            \Illuminate\Support\Facades\Storage::disk('local')->delete($this->bukti_ktm_path);
+            $this->bukti_ktm_path = null;
+            $this->save();
+        }
     }
 }
